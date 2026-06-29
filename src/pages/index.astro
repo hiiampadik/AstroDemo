@@ -1,0 +1,27 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+
+const subpages = await getCollection('subpages');
+---
+
+<Layout title="Fakta — Home">
+  <main>
+    <header>
+      <h1>Fakta</h1>
+      <h2>A list of subpages managed via Decap CMS</h2>
+    </header>
+
+    <nav aria-label="Subpages">
+      <ul>
+        {
+          subpages.map((page) => (
+            <li>
+              <a href={`/${page.slug}`}>{page.data.title}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </main>
+</Layout>

@@ -1,0 +1,19 @@
+backend:
+  name: github
+  repo: owner/repo-name # Will be replaced by user
+  branch: main
+
+media_folder: "public/images"
+public_folder: "/images"
+
+collections:
+  - name: "subpages"
+    label: "Subpages"
+    folder: "src/content/subpages"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Subtitle", name: "subtitle", widget: "string" }
+      - { label: "Graphic (SVG)", name: "graphic", widget: "file", file_extensions: ["svg"] }
+      - { label: "Body Paragraph", name: "body", widget: "markdown" }
