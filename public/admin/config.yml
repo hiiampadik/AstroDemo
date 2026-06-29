@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: owner/repo-name # Will be replaced by user
+  repo: hiiampadik/AstroDemo
   branch: main
 
 media_folder: "public/images"
