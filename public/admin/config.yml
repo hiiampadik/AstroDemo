@@ -2,6 +2,8 @@ backend:
   name: github
   repo: hiiampadik/AstroDemo
   branch: master
+  base_url: https://decap-oauth.brona-musil.workers.dev
+  auth_endpoint: /auth
 
 media_folder: "public/images"
 public_folder: "/images"
