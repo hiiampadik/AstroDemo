@@ -1,7 +1,7 @@
 ---
-title: "The First Fact"
-subtitle: "An introduction to dynamic content"
-graphic: "/images/example-1.svg"
+title: The First Factt
+subtitle: An introduction to dynamic content
+graphic: /images/example-1.svg
 ---
 
 This is the first example subpage. Its content is authored in Markdown and
