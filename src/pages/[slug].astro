@@ -50,9 +50,11 @@ const chapterLabel = chapterName(data.chapter);
 const imgSrc = imgUrl(data.image);
 
 const pdfHref = data.downloads?.pdf || null;
-const tableUrl = data.data?.tableUrl || '#';
-const sourceUrl = data.data?.sourceUrl || '#';
+const tableUrl = data.data?.tableUrl || null;
+const sourceUrl = data.data?.sourceUrl || null;
 const citation = data.data?.citation || '';
+const hasDataLinks = tableUrl || sourceUrl;
+const hasUnderlyingData = hasDataLinks || citation;
 
 const href = (slug: string) => `${base}/${slug}/`;
 ---
@@ -89,22 +91,30 @@ const href = (slug: string) => `${base}/${slug}/`;
                 </ButtonGroup>
               </section>
 
-              <section class="meta__block">
-                <h2 class="meta__label type-eyebrow">Underlying data</h2>
-                <div class="meta__data">
-                  <ButtonGroup direction="column">
-                    <Button variant="text" tone="secondary" href={tableUrl}>
-                      <ExternalLinkIcon slot="icon-left" size={16} />
-                      Our data table
-                    </Button>
-                    <Button variant="text" tone="secondary" href={sourceUrl}>
-                      <CodeIcon slot="icon-left" size={16} />
-                      Data source
-                    </Button>
-                  </ButtonGroup>
-                  {citation && <p class="meta__source type-small">{citation}</p>}
-                </div>
-              </section>
+              {hasUnderlyingData && (
+                <section class="meta__block">
+                  <h2 class="meta__label type-eyebrow">Underlying data</h2>
+                  <div class="meta__data">
+                    {hasDataLinks && (
+                      <ButtonGroup direction="column">
+                        {tableUrl && (
+                          <Button variant="text" tone="secondary" href={tableUrl}>
+                            <ExternalLinkIcon slot="icon-left" size={16} />
+                            Our data table
+                          </Button>
+                        )}
+                        {sourceUrl && (
+                          <Button variant="text" tone="secondary" href={sourceUrl}>
+                            <CodeIcon slot="icon-left" size={16} />
+                            Data source
+                          </Button>
+                        )}
+                      </ButtonGroup>
+                    )}
+                    {citation && <p class="meta__source type-small">{citation}</p>}
+                  </div>
+                </section>
+              )}
 
               {related.length > 0 && (
                 <section class="meta__block">
