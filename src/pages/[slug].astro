@@ -207,6 +207,12 @@ const href = (slug: string) => `${base}/${slug}/`;
   .detail__sidebar-sticky {
     position: sticky;
     top: var(--sticky-top);
+    /* Stay pinned while the content scrolls. Only if the panel itself is
+       taller than the viewport does it scroll — and then only when the
+       cursor is over it (that's where the scroll container lives). */
+    max-height: calc(100vh - var(--sticky-top) - var(--size-6));
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
   .meta {
     display: flex;
