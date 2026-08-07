@@ -19,7 +19,7 @@ const detailHref = (slug: string) => `${base}/${slug}/`;
   <FancyBar />
   <Nav />
 
-  <div class="feed" data-view="grid">
+  <div class="feed" data-view="list">
     <!-- Fixed split background — stays put while the page scrolls. -->
     <div class="feed-bg" aria-hidden="true">
       <div class="feed-bg__fill feed-bg__fill--left"></div>
@@ -39,10 +39,10 @@ const detailHref = (slug: string) => `${base}/${slug}/`;
         </aside>
 
         <div class="feed__content">
-          <div class="feed__toolbar"><ViewToggle initial="grid" /></div>
+          <div class="feed__toolbar"><ViewToggle initial="list" /></div>
 
           <!-- Grid view -->
-          <div class="feed__view feed__view--grid" data-view-panel="grid">
+          <div class="feed__view feed__view--grid" data-view-panel="grid" hidden>
             {
               chapters.map((ch) => (
                 <section class="section" data-chapter={ch.id}>
@@ -67,7 +67,7 @@ const detailHref = (slug: string) => `${base}/${slug}/`;
           </div>
 
           <!-- List view -->
-          <div class="feed__view feed__view--list" data-view-panel="list" hidden>
+          <div class="feed__view feed__view--list" data-view-panel="list">
             {
               chapters.map((ch) => (
                 <section class="section" data-chapter={ch.id}>
