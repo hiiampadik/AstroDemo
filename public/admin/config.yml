@@ -7,8 +7,8 @@ backend:
 
 local_backend: true
 
-media_folder: "public/images"
-public_folder: "/images"
+media_folder: "public/images/atlas"
+public_folder: "/images/atlas"
 
 collections:
   - name: "infographics"
@@ -19,11 +19,7 @@ collections:
     slug: "{{slug}}"
     identifier_field: "title"
     summary: "{{title}}  ·  {{chapter}}"
-    sortable_fields:
-      fields: ["order", "chapter", "title"]
-      default:
-        field: "order"
-        direction: "ascending"
+    sortable_fields: ["order", "chapter", "title"]
     view_groups:
       - label: "Chapter"
         field: "chapter"
@@ -43,8 +39,6 @@ collections:
       - label: "Graphic"
         name: "image"
         widget: "image"
-        media_folder: "/public/images/atlas"
-        public_folder: "/images/atlas"
         hint: "The infographic image. Also offered as a PNG download."
       - label: "Downloads"
         name: "downloads"
