@@ -19,7 +19,7 @@ Climate change is not just a change in temperatures – this umbrella term cover
 
 ## What causes climate change?
 
-Human activity, particularly burning fossil fuels (coal, oil, and natural gas), leads to an increase in the concentration of carbon dioxide (CO₂) in the atmosphere. About 35–40 billion tons of CO₂ are produced annually in energy production, transportation, and industry, while deforestation adds another 4–5 billion tons. On average, every person on Earth accounts for about 5 tons of CO₂ per year. (See also: [CO₂ concentrations and global greenhouse emissions](/co2-concentrations-at-an-800000-year-high/).)
+Human activity, particularly burning fossil fuels (coal, oil, and natural gas), leads to an increase in the concentration of carbon dioxide (CO₂) in the atmosphere. About 35–40 billion tons of CO₂ are produced annually in energy production, transportation, and industry, while deforestation adds another 4–5 billion tons. On average, every person on Earth accounts for about 5 tons of CO₂ per year. (See also: [CO₂ concentrations](/co2-concentrations-at-an-800000-year-high/) and [global greenhouse emissions](/global-emissions-continue-to-grow/).)
 
 Other greenhouse gases include methane (CH₄), nitrous oxide (N₂O), and F-gases (fluorinated gases). Methane is produced in agriculture (livestock farming, rice cultivation, etc.) and released into the atmosphere from coal mining and oil and gas extraction. Nitrous oxide arises from the use of fertilizers and in some combustion processes. F-gases are used for refrigeration and air-conditioning.
 
