@@ -125,7 +125,7 @@ const detailHref = (slug: string) => `${base}/${slug}/`;
     display: flex;
     pointer-events: none;
   }
-  .feed-bg__fill { flex: 1 1 0; min-width: var(--size-4); }
+  .feed-bg__fill { flex: 1 1 0; min-width: var(--size-9); } /* matches nav padding */
   .feed-bg__fill--left { background: var(--blue-gray-200); }
   .feed-bg__fill--right { background: var(--blue-gray-100); }
   .feed-bg__center {
@@ -139,7 +139,7 @@ const detailHref = (slug: string) => `${base}/${slug}/`;
 
   /* Layout spacers — same flex sizing as the background fills so the content
      columns line up over the tints. */
-  .feed__spacer { flex: 1 1 0; min-width: var(--size-4); }
+  .feed__spacer { flex: 1 1 0; min-width: var(--size-9); } /* matches nav padding */
 
   .feed__center {
     position: relative;
@@ -210,18 +210,22 @@ const detailHref = (slug: string) => `${base}/${slug}/`;
 </style>
 
 <script>
-  const feed = document.querySelector('.feed');
-  if (feed) {
-    const sidenav = feed.querySelector('.sidenav');
+  function initFeed() {
+    const feed = document.querySelector<HTMLElement>('.feed');
+    if (!feed) return;
+    const sidenav = feed.querySelector<HTMLElement>('.sidenav');
+    if (!sidenav) return;
     const OFFSET = 150; // viewport-top line for the "current" infographic
 
-    const visiblePanel = () => feed.querySelector('.feed__view:not([hidden])');
+    const visiblePanel = () =>
+      feed.querySelector<HTMLElement>('.feed__view:not([hidden])');
 
-    function setActive(slug, chapterId) {
-      sidenav.querySelectorAll('.chapter').forEach((ch) => {
+    function setActive(slug: string | null, chapterId: string | null) {
+      // sidenav is guarded non-null above; TS widens it back inside this closure.
+      sidenav!.querySelectorAll('.chapter').forEach((ch) => {
         ch.classList.toggle('is-active', ch.getAttribute('data-chapter') === chapterId);
       });
-      sidenav.querySelectorAll('.toc-link').forEach((l) => {
+      sidenav!.querySelectorAll('.toc-link').forEach((l) => {
         l.classList.toggle('is-current', l.getAttribute('data-slug') === slug);
       });
     }
@@ -229,7 +233,7 @@ const detailHref = (slug: string) => `${base}/${slug}/`;
     // While a TOC click is smooth-scrolling, freeze the scroll-spy so it
     // doesn't walk through the intermediate sections/articles on the way.
     let spyLocked = false;
-    let unlockTimer;
+    let unlockTimer: ReturnType<typeof setTimeout>;
     function scheduleUnlock() {
       clearTimeout(unlockTimer);
       unlockTimer = setTimeout(() => {
@@ -296,20 +300,20 @@ const detailHref = (slug: string) => `${base}/${slug}/`;
     // scroll-spy stays frozen until the smooth scroll settles — so no
     // article-by-article walk on the way there.
     sidenav.addEventListener('click', (event) => {
-      const link = event.target.closest('[data-slug], [data-chapter-link]');
+      const link = (event.target as HTMLElement | null)?.closest(
+        '[data-slug], [data-chapter-link]'
+      );
       if (!link) return;
       event.preventDefault();
       const panel = visiblePanel();
+      if (!panel) return;
       const clickedSlug = link.getAttribute('data-slug');
       const chapterId =
         link.getAttribute('data-chapter-link') || link.getAttribute('data-chapter');
 
-      let target = null;
-      if (clickedSlug) {
-        target = panel.querySelector('[data-slug="' + clickedSlug + '"]');
-      } else {
-        target = panel.querySelector('.section[data-chapter="' + chapterId + '"]');
-      }
+      const target = clickedSlug
+        ? panel.querySelector('[data-slug="' + clickedSlug + '"]')
+        : panel.querySelector('.section[data-chapter="' + chapterId + '"]');
       if (!target) return;
 
       // Which article should carry the dot: the clicked one, else the
@@ -333,8 +337,9 @@ const detailHref = (slug: string) => `${base}/${slug}/`;
     buttons.forEach((btn) => {
       btn.addEventListener('click', () => {
         const view = btn.getAttribute('data-view-btn');
+        if (!view) return;
         feed.setAttribute('data-view', view);
-        feed.querySelectorAll('.feed__view').forEach((panel) => {
+        feed.querySelectorAll<HTMLElement>('.feed__view').forEach((panel) => {
           panel.hidden = panel.getAttribute('data-view-panel') !== view;
         });
         buttons.forEach((b) => {
@@ -345,5 +350,19 @@ const detailHref = (slug: string) => `${base}/${slug}/`;
         onScroll();
       });
     });
+
+    // The <body> is swapped on each view transition, but window survives —
+    // so tear down its listeners before the next navigation to avoid stacking.
+    document.addEventListener(
+      'astro:before-swap',
+      () => {
+        window.removeEventListener('scroll', onWindowScroll);
+        window.removeEventListener('resize', requestTick);
+      },
+      { once: true }
+    );
   }
+
+  // Runs on the first load and after every view-transition navigation.
+  document.addEventListener('astro:page-load', initFeed);
 </script>

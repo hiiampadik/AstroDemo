@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import FancyBar from '../components/FancyBar.astro';
 import Nav from '../components/Nav.astro';
@@ -19,7 +19,9 @@ export async function getStaticPaths() {
   const lookup = new Map(flat.map((f) => [f.slug, f]));
 
   const entries = await getCollection('infographics');
-  const entryBySlug = new Map(entries.map((e) => [e.slug, e]));
+  const entryBySlug = new Map<string, (typeof entries)[number]>(
+    entries.map((e) => [e.id, e])
+  );
 
   return flat.map((item, i) => {
     const entry = entryBySlug.get(item.slug)!;
@@ -34,13 +36,13 @@ export async function getStaticPaths() {
       .filter(Boolean)
       .map((r) => ({ slug: r!.slug, title: r!.title, image: r!.image }));
 
-    return { params: { slug: item.slug }, props: { item, entry, related } };
+    return { params: { slug: item.slug }, props: { entry, related } };
   });
 }
 
-const { item, entry, related } = Astro.props;
+const { entry, related } = Astro.props;
 const data = entry.data;
-const { Content } = await entry.render();
+const { Content } = await render(entry);
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 

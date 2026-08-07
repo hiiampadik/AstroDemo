@@ -245,7 +245,7 @@ const {
         toggle.setAttribute('aria-expanded', String(open));
       });
       document.addEventListener('click', (event) => {
-        if (!langWrap.contains(event.target)) {
+        if (!langWrap.contains(event.target as Node | null)) {
           nav.classList.remove('is-lang-open');
           toggle.setAttribute('aria-expanded', 'false');
         }

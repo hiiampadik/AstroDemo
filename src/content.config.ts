@@ -1,4 +1,6 @@
-import { z, defineCollection } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
 
 /**
  * Infographics — the Atlas content model, edited in Decap CMS.
@@ -6,7 +8,10 @@ import { z, defineCollection } from 'astro:content';
  * Chapter metadata (name / tagline / order) lives in src/data/chapters.ts.
  */
 const infographicsCollection = defineCollection({
-  type: 'content',
+  // Content Layer API (Astro 5+): the glob loader replaces the old
+  // `type: 'content'`. Entry ids are the filenames (e.g. `accelerating-sea-
+  // level-rise`), matching the slugs used by the CMS `related` relations.
+  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/infographics' }),
   schema: z.object({
     title: z.string(),
     lead: z.string(),

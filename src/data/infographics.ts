@@ -34,7 +34,7 @@ export async function getChapters(): Promise<FeedChapter[]> {
         .filter((e) => e.data.chapter === ch.id)
         .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0))
         .map((e) => ({
-          slug: e.slug,
+          slug: e.id,
           title: e.data.title,
           lead: e.data.lead,
           image: e.data.image,

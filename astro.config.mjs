@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import { satteri } from '@astrojs/markdown-satteri';
 
 // The GitHub Pages project site lives under /AtlasOfClimateChange. Local dev +
 // the Decap admin run at the root (BASE_PATH=/ in the dev script) so CMS image
@@ -10,28 +11,31 @@ const base = process.env.BASE_PATH ?? '/AtlasOfClimateChange';
 // Markdown cross-links are authored root-absolute (/slug/). Astro does NOT
 // prefix Markdown link hrefs with `base`, so rewrite internal links here so
 // they resolve under /AtlasOfClimateChange (prod) and / (dev) alike.
-function rehypeBaseLinks() {
+//
+// Sätteri (Astro 7's default Markdown processor) uses a filtered-visitor plugin
+// model instead of remark/rehype: `filter` selects tags in Rust, `visit` runs
+// per matched node, and mutations go through `ctx.setProperty` rather than
+// direct assignment. This is the HAST port of the former rehype plugin.
+function satteriBaseLinks() {
   const prefix = base.replace(/\/$/, ''); // '' when base is '/'
-  const walk = (node) => {
-    if (
-      node.type === 'element' &&
-      node.tagName === 'a' &&
-      node.properties &&
-      typeof node.properties.href === 'string'
-    ) {
-      const href = node.properties.href;
-      if (
-        prefix &&
-        href.startsWith('/') &&
-        !href.startsWith('//') &&
-        !href.startsWith(prefix + '/')
-      ) {
-        node.properties.href = prefix + href;
-      }
-    }
-    if (node.children) node.children.forEach(walk);
+  return {
+    name: 'satteri-base-links',
+    element: {
+      filter: ['a'],
+      visit(node, ctx) {
+        if (!prefix) return;
+        const href = node.properties?.href;
+        if (
+          typeof href === 'string' &&
+          href.startsWith('/') &&
+          !href.startsWith('//') &&
+          !href.startsWith(prefix + '/')
+        ) {
+          ctx.setProperty(node, 'href', prefix + href);
+        }
+      },
+    },
   };
-  return (tree) => walk(tree);
 }
 
 // https://astro.build/config
@@ -40,6 +44,6 @@ export default defineConfig({
   site: 'https://hiiampadik.github.io',
   base,
   markdown: {
-    rehypePlugins: [rehypeBaseLinks],
+    processor: satteri({ hastPlugins: [satteriBaseLinks()] }),
   },
 });
