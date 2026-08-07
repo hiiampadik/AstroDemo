@@ -1,6 +1,7 @@
 ---
-title: Accelerating Sea Level Rise
-lead: From 1880 to 2025, global mean sea level rose by about 25 centimetres — and it will keep rising for centuries.
+title: AAccelerating Sea Level Rise
+lead: From 1880 to 2025, global mean sea level rose by about 25 centimetres —
+  and it will keep rising for centuries.
 chapter: the-impacts
 order: 1
 image: /images/atlas/atlas-_26.png
