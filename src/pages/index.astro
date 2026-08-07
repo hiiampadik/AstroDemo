@@ -225,7 +225,20 @@ const detailHref = (slug: string) => `${base}/${slug}`;
       });
     }
 
+    // While a TOC click is smooth-scrolling, freeze the scroll-spy so it
+    // doesn't walk through the intermediate sections/articles on the way.
+    let spyLocked = false;
+    let unlockTimer;
+    function scheduleUnlock() {
+      clearTimeout(unlockTimer);
+      unlockTimer = setTimeout(() => {
+        spyLocked = false;
+        onScroll();
+      }, 150);
+    }
+
     function onScroll() {
+      if (spyLocked) return;
       const panel = visiblePanel();
       if (!panel) return;
 
@@ -260,8 +273,12 @@ const detailHref = (slug: string) => `${base}/${slug}`;
         ticking = false;
       });
     };
+    const onWindowScroll = () => {
+      if (spyLocked) scheduleUnlock(); // each scroll tick resets the settle timer
+      requestTick();
+    };
     onScroll();
-    window.addEventListener('scroll', requestTick, { passive: true });
+    window.addEventListener('scroll', onWindowScroll, { passive: true });
     window.addEventListener('resize', requestTick, { passive: true });
 
     // Clicking the logo scrolls smoothly to the top (home is already here).
@@ -274,17 +291,40 @@ const detailHref = (slug: string) => `${base}/${slug}`;
     }
 
     // Clicking a TOC entry scrolls to the matching item in the visible panel.
+    // The correct section opens (and its dot appears) immediately, and the
+    // scroll-spy stays frozen until the smooth scroll settles — so no
+    // article-by-article walk on the way there.
     sidenav.addEventListener('click', (event) => {
       const link = event.target.closest('[data-slug], [data-chapter-link]');
       if (!link) return;
       event.preventDefault();
       const panel = visiblePanel();
-      const slug = link.getAttribute('data-slug');
-      const chapterId = link.getAttribute('data-chapter-link');
+      const clickedSlug = link.getAttribute('data-slug');
+      const chapterId =
+        link.getAttribute('data-chapter-link') || link.getAttribute('data-chapter');
+
       let target = null;
-      if (slug) target = panel.querySelector('[data-slug="' + slug + '"]');
-      else if (chapterId) target = panel.querySelector('.section[data-chapter="' + chapterId + '"]');
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (clickedSlug) {
+        target = panel.querySelector('[data-slug="' + clickedSlug + '"]');
+      } else {
+        target = panel.querySelector('.section[data-chapter="' + chapterId + '"]');
+      }
+      if (!target) return;
+
+      // Which article should carry the dot: the clicked one, else the
+      // section's first article.
+      const firstCard = panel.querySelector(
+        '.section[data-chapter="' + chapterId + '"] [data-slug]'
+      );
+      const dotSlug =
+        clickedSlug || (firstCard ? firstCard.getAttribute('data-slug') : null);
+
+      // Open the right section + place the dot up front, then freeze the spy
+      // for the duration of the smooth scroll.
+      setActive(dotSlug, chapterId);
+      spyLocked = true;
+      scheduleUnlock();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
     // Grid / list toggle.
