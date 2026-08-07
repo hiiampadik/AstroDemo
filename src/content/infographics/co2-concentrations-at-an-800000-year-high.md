@@ -37,4 +37,4 @@ Moreover, there is ample evidence that the rise in CO₂ concentrations is cause
 
 - The rise of CO₂ concentrations corresponds to the amount of fossil fuels burned each year (when some absorption of CO₂ by the ocean is factored).
 - Carbon atoms in CO₂ are not all the same – they exist as different isotopes. Different sources of CO₂ have unique isotopic fingerprints. Because fossil fuels are millions of years old, they contain virtually no ¹⁴C, which decays over time. Isotope analyses of atmospheric CO₂ show declining concentrations of ¹⁴C, meaning that an increasing proportion of atmospheric CO₂ comes from fossil fuel emissions.
-- The rise of CO₂ concentrations is paralleled by the decline of O₂ concentrations, which corresponds to the O₂ loss by burning fossil fuels (See also: *The Changing Balance of Atmospheric CO₂ & O₂*.)
+- The rise of CO₂ concentrations is paralleled by the decline of O₂ concentrations, which corresponds to the O₂ loss by burning fossil fuels (See also: [The Changing Balance of Atmospheric CO₂ & O₂](/the-changing-balance-of-atmospheric-co2-and-o2/).)

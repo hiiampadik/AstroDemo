@@ -26,4 +26,4 @@ If global emissions begin to drop in 2026 and reach Net Zero by 2050 – as many
 
 ### The Plateau and Decline Path (2 °C)
 
-Imagine a scenario where emissions plateau at 2025 levels until 2030, then gradually decrease to Net Zero by 2070. This would require an annual reduction of 2.5%. Under this plan, the world would emit roughly 1,050 Gt CO₂ – significantly more than the previous scenarios, but still within the 2 °C budget. While this path is more in line with current national pledges, it is far from guaranteed; most countries are not yet on track to meet their existing promises (See also: *Projections of Warming in 2100*).
+Imagine a scenario where emissions plateau at 2025 levels until 2030, then gradually decrease to Net Zero by 2070. This would require an annual reduction of 2.5%. Under this plan, the world would emit roughly 1,050 Gt CO₂ – significantly more than the previous scenarios, but still within the 2 °C budget. While this path is more in line with current national pledges, it is far from guaranteed; most countries are not yet on track to meet their existing promises (See also: [Projections of Warming in 2100](/projections-of-warming-in-2100/)).

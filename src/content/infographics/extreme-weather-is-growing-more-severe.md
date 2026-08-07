@@ -10,7 +10,7 @@ Extremes such as heat waves, droughts, and heavy rainfall occur more frequently 
 
 ## Where are we now on the graph?
 
-Warming is now (as of 2026) about 1.3 °C relative to the pre-industrial era (See also: *How Much Is the Planet Warming?*) and the 1.5 °C threshold is expected to be reached around 2030.
+Warming is now (as of 2026) about 1.3 °C relative to the pre-industrial era (See also: [How Much Is the Planet Warming?](/how-much-is-the-planet-warming/)) and the 1.5 °C threshold is expected to be reached around 2030.
 
 ## Weather extremes are connected
 

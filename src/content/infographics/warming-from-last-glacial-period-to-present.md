@@ -10,7 +10,7 @@ Some argue that the climate has always been changing. The climate has indeed alw
 
 From this historical perspective, the temperature change in the last hundred years shown in the graph is huge and abrupt – such a trend is not natural for the world's climate.
 
-Calculations and computer simulations also show that at the end of this century the planet will be about 1.5–3.5 °C warmer than in preindustrial era, depending on how quickly greenhouse gas emissions are reduced (See also: *Projections of Warming in 2100*.).
+Calculations and computer simulations also show that at the end of this century the planet will be about 1.5–3.5 °C warmer than in preindustrial era, depending on how quickly greenhouse gas emissions are reduced (See also: [Projections of Warming in 2100](/projections-of-warming-in-2100/).).
 
 ## What does the temperature change mean for humans and for the living world?
 
@@ -18,7 +18,7 @@ During the Last Glacial Maximum (peaking between 26,000 and 20,000 years ago), C
 
 In the following ten thousand years, temperatures rose slowly and the world became 7 °C warmer. Glaciers melted away and the natural world adapted to this change – including humans who could now settle in previously uninhabitable northern areas. This warming period was followed by a long era in which the annual global temperature did not change very much, which was favourable for civilization growth.
 
-Current warming, however, is at least 10 times faster and does not give ecosystems and species sufficient time to adapt. This abrupt warming may have far-reaching consequences for life on the planet as well as for human civilization (See also: *climate tipping points*.).
+Current warming, however, is at least 10 times faster and does not give ecosystems and species sufficient time to adapt. This abrupt warming may have far-reaching consequences for life on the planet as well as for human civilization (See also: [climate tipping points](/map-of-climate-tipping-points/).).
 
 ## How do scientists measure past temperatures?
 
