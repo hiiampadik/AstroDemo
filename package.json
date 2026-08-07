@@ -4,6 +4,9 @@
   "version": "0.1.0",
   "private": true,
   "description": "Atlas of Climate Change — a visual guide to the science and data, for Fakta o Klimatu.",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "author": {
     "name": "Bronislav Musil",
     "url": "https://github.com/hiiampadik"
