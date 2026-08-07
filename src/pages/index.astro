@@ -12,7 +12,7 @@ import { getChapters } from '../data/infographics';
 
 const chapters = await getChapters();
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const detailHref = (slug: string) => `${base}/${slug}`;
+const detailHref = (slug: string) => `${base}/${slug}/`;
 ---
 
 <Layout title="Atlas of Climate Change" fullWidth>

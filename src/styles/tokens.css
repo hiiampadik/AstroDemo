@@ -118,4 +118,7 @@
 
 html {
   font-family: var(--font-sans);
+  /* Non-white base so a page swap never flashes white before the fixed
+     split-background layer paints. */
+  background-color: var(--blue-gray-100);
 }
