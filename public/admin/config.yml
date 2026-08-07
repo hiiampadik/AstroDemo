@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: hiiampadik/AstroDemo
+  repo: hiiampadik/AtlasOfClimateChange
   branch: master
   base_url: https://decap-oauth.brona-musil.workers.dev
   auth_endpoint: /auth
