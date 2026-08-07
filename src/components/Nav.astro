@@ -39,7 +39,7 @@ const {
 ---
 
 <header
-  class:list={['nav', { 'is-collapsed': compact }, className]}
+  class:list={['nav', className]}
   data-nav
   data-compact={compact ? '' : undefined}
 >
@@ -85,6 +85,9 @@ const {
 
 <style>
   .nav {
+    /* 0 = hero, 1 = compact. Driven linearly from scroll (see <script>);
+       every size below interpolates between the two states via this var. */
+    --nav-progress: 0;
     position: fixed;
     top: var(--size-5); /* 20px — sits below the FancyBar */
     left: 0;
@@ -92,11 +95,16 @@ const {
     z-index: 90;
     display: flex;
     justify-content: center;
-    padding: var(--size-12) var(--size-9); /* 48px 36px (hero) */
+    /* block padding 48px (hero) → 20px (compact) */
+    padding: calc(48px - 28px * var(--nav-progress)) var(--size-9);
     background: var(--blue-700); /* #1d4ed8 */
     border-bottom: 1px solid rgba(255, 255, 255, 0.15);
     color: var(--white);
-    transition: padding 0.3s ease;
+  }
+
+  /* Detail pages start (and stay) compact — no scroll wiring runs there. */
+  .nav[data-compact] {
+    --nav-progress: 1;
   }
 
   .nav__inner {
@@ -111,34 +119,35 @@ const {
   .nav__brand {
     display: flex;
     flex-direction: column;
-    gap: var(--size-1-5); /* 6px */
+    /* row gap 6px → 0 so the collapsing subtitle leaves no empty gap */
+    gap: calc(6px - 6px * var(--nav-progress));
     color: var(--white);
     text-decoration: none;
-    transition: gap 0.3s ease;
   }
 
   .nav__title {
     font-family: var(--font-sans);
     font-weight: 600;
-    font-size: 72px;
+    /* 72px (hero) → 24px (compact) */
+    font-size: calc(72px - 48px * var(--nav-progress));
     line-height: 1.2;
-    letter-spacing: -2.88px;
+    /* -2.88px → -0.48px */
+    letter-spacing: calc(-2.88px + 2.4px * var(--nav-progress));
     white-space: nowrap;
-    transition: font-size 0.3s ease, letter-spacing 0.3s ease;
   }
 
   .nav__subtitle {
     max-width: 680px;
     overflow: hidden;
-    max-height: 40px;
+    /* 40px → 0 */
+    max-height: calc(40px - 40px * var(--nav-progress));
     font-family: var(--font-sans);
     font-weight: 600;
     font-size: 18px;
     line-height: 1.1;
     letter-spacing: -0.36px;
     color: #f3f3f3;
-    opacity: 1;
-    transition: max-height 0.3s ease, opacity 0.2s ease;
+    opacity: calc(1 - var(--nav-progress));
   }
 
   .nav__links {
@@ -154,23 +163,6 @@ const {
     white-space: nowrap;
   }
   .nav__link:hover { text-decoration: underline; }
-
-  /* --- Collapsed (scrolled) state --- */
-  .nav.is-collapsed {
-    padding: var(--size-5) var(--size-9); /* 20px 36px */
-  }
-  .nav.is-collapsed .nav__inner { align-items: center; }
-  .nav.is-collapsed .nav__title {
-    font-size: 24px;
-    letter-spacing: -0.48px;
-  }
-  .nav.is-collapsed .nav__subtitle {
-    max-height: 0;
-    opacity: 0;
-  }
-  /* Drop the brand's row gap when collapsed so the hidden subtitle doesn't
-     leave an empty gap below the title. */
-  .nav.is-collapsed .nav__brand { gap: 0; }
 
   /* --- Language switcher --- */
   .nav__lang { position: relative; }
@@ -224,38 +216,96 @@ const {
 </style>
 
 <script>
-  const nav = document.querySelector('[data-nav]');
-  if (nav) {
-    // Collapse hero → compact on scroll (skipped when the nav is always compact).
-    if (!nav.hasAttribute('data-compact')) {
-      const onScroll = () => {
-        nav.classList.toggle('is-collapsed', window.scrollY > 24);
-      };
-      onScroll();
-      window.addEventListener('scroll', onScroll, { passive: true });
-    }
+  // The nav element is swapped on every ClientRouter navigation, so we keep a
+  // module-level handle and re-point it on `astro:page-load` (fires on the
+  // initial load and after each navigation). Listeners on window/document
+  // persist across swaps, so they're wired once and read this handle.
+  let nav: HTMLElement | null = null;
 
-    // Language dropdown toggle.
-    const langWrap = nav.querySelector('[data-lang]');
-    const toggle = nav.querySelector('[data-lang-toggle]');
-    if (langWrap && toggle) {
-      toggle.addEventListener('click', (event) => {
-        event.stopPropagation();
-        const open = nav.classList.toggle('is-lang-open');
-        toggle.setAttribute('aria-expanded', String(open));
-      });
-      document.addEventListener('click', (event) => {
-        if (!langWrap.contains(event.target as Node | null)) {
-          nav.classList.remove('is-lang-open');
-          toggle.setAttribute('aria-expanded', 'false');
-        }
-      });
-      document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') {
-          nav.classList.remove('is-lang-open');
-          toggle.setAttribute('aria-expanded', 'false');
-        }
-      });
+  // We want the bar's BOTTOM edge to move at the same speed as the scrolling
+  // content (1px scroll → 1px shrink), so nothing appears to slide relative to
+  // the bar. The nav's height is NOT linear in --nav-progress (near the end the
+  // links row becomes the tallest element and only the padding keeps shrinking),
+  // so a linear scroll→progress map only matches the average speed, not the
+  // instantaneous one. Instead we sample height(progress) on load and invert it:
+  // for a given scroll we solve for the progress whose height = hero − scroll.
+  const SAMPLES = 24;
+  let heightByProgress: number[] = []; // offsetHeight at progress i/SAMPLES
+
+  const measure = () => {
+    if (!nav || nav.hasAttribute('data-compact')) return;
+    const prev = nav.style.getPropertyValue('--nav-progress');
+    heightByProgress = [];
+    for (let i = 0; i <= SAMPLES; i++) {
+      nav.style.setProperty('--nav-progress', String(i / SAMPLES));
+      heightByProgress.push(nav.offsetHeight);
     }
-  }
+    if (prev) nav.style.setProperty('--nav-progress', prev);
+    else nav.style.removeProperty('--nav-progress');
+  };
+
+  // Progress whose nav height equals (hero − scroll), by linear interpolation
+  // between the two bracketing samples. Height decreases as progress increases.
+  const progressForScroll = (scroll: number) => {
+    const hero = heightByProgress[0];
+    const compact = heightByProgress[SAMPLES];
+    const target = hero - Math.max(scroll, 0);
+    if (target >= hero) return 0;
+    if (target <= compact) return 1;
+    for (let i = 0; i < SAMPLES; i++) {
+      const hi = heightByProgress[i];
+      const lo = heightByProgress[i + 1];
+      if (target <= hi && target >= lo) {
+        const span = hi - lo || 1;
+        return (i + (hi - target) / span) / SAMPLES;
+      }
+    }
+    return 1;
+  };
+
+  const applyProgress = () => {
+    // Detail pages are always compact (CSS pins --nav-progress:1); skip them.
+    if (!nav || nav.hasAttribute('data-compact') || !heightByProgress.length)
+      return;
+    nav.style.setProperty(
+      '--nav-progress',
+      progressForScroll(window.scrollY).toFixed(4),
+    );
+  };
+
+  const closeLang = () => {
+    if (!nav) return;
+    nav.classList.remove('is-lang-open');
+    nav
+      .querySelector('[data-lang-toggle]')
+      ?.setAttribute('aria-expanded', 'false');
+  };
+
+  window.addEventListener('scroll', applyProgress, { passive: true });
+  window.addEventListener('resize', () => {
+    measure();
+    applyProgress();
+  });
+
+  document.addEventListener('click', (event) => {
+    const langWrap = nav?.querySelector('[data-lang]');
+    if (langWrap && !langWrap.contains(event.target as Node | null)) closeLang();
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeLang();
+  });
+
+  // (Re)bind to the current nav on first load and after every navigation.
+  document.addEventListener('astro:page-load', () => {
+    nav = document.querySelector('[data-nav]');
+    measure();
+    applyProgress();
+
+    const toggle = nav?.querySelector('[data-lang-toggle]');
+    toggle?.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const open = nav!.classList.toggle('is-lang-open');
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+  });
 </script>

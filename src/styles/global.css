@@ -86,3 +86,10 @@ svg {
 main > * + * {
   margin-top: 1.5rem;
 }
+
+/* --- View transitions --- */
+/* Shorten the default page fade (Astro default is 0.2s). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.1s;
+}
