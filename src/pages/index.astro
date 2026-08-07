@@ -264,6 +264,15 @@ const detailHref = (slug: string) => `${base}/${slug}`;
     window.addEventListener('scroll', requestTick, { passive: true });
     window.addEventListener('resize', requestTick, { passive: true });
 
+    // Clicking the logo scrolls smoothly to the top (home is already here).
+    const brand = document.querySelector('.nav__brand');
+    if (brand) {
+      brand.addEventListener('click', (event) => {
+        event.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
     // Clicking a TOC entry scrolls to the matching item in the visible panel.
     sidenav.addEventListener('click', (event) => {
       const link = event.target.closest('[data-slug], [data-chapter-link]');
