@@ -149,19 +149,25 @@ const href = (slug: string) => `${base}/${slug}/`;
 
 <style is:global>
   body { padding: 0; }
+  /* Clip the hero's right full-bleed at the root instead of on .detail, so no
+     ancestor of the sidebar has a non-visible overflow (which would break its
+     position: sticky). overflow-y stays visible → the page still scrolls and
+     the sticky sidebar references the viewport. */
+  html { overflow-x: clip; }
 </style>
 
 <style>
   .detail {
     --top-clear: 89px; /* FancyBar 20 + compact nav 69 */
-    --sticky-top: 100px;
+    /* Pin the sidebar exactly at its natural offset (col padding-top below),
+       so it's fixed from the first scrolled pixel — no sticky "settle" travel. */
+    --sticky-top: calc(var(--top-clear) + var(--size-12)); /* 89 + 48 = 137px */
     position: relative;
     display: flex;
     align-items: stretch;
-    /* clip (not hidden) so the hero's right bleed can't add a horizontal
-       scrollbar, while keeping the sticky sidebar working */
-    overflow-x: clip;
-    overflow-y: visible;
+    /* No overflow here: any non-visible overflow on an ancestor would break
+       the sidebar's position: sticky. The hero's right bleed is clipped at
+       the root instead (html { overflow-x: clip }). */
   }
 
   /* Fixed split background */
@@ -202,7 +208,7 @@ const href = (slug: string) => `${base}/${slug}/`;
 
   /* Sidebar meta panel */
   .detail__sidebar-col {
-    padding: calc(var(--top-clear) + 48px) var(--size-9) 0 0; /* right gap 36 */
+    padding: calc(var(--top-clear) + var(--size-12)) var(--size-9) 0 0; /* top matches --sticky-top; right gap 36 */
     border-right: 1px solid var(--blue-gray-100);
   }
   .detail__sidebar-sticky {
