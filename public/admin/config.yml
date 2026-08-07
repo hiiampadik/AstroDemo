@@ -61,6 +61,7 @@ collections:
         widget: "list"
         required: false
         summary: "{{fields.slug}}"
+        hint: "Shown in the \"More articles\" box on this infographic's detail page. Leave empty to automatically show the next 2 infographics."
         field:
           label: "Infographic"
           name: "slug"
