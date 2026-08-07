@@ -15,16 +15,20 @@ related:
   - co2-concentrations-at-an-800000-year-high
 ---
 
-## A long-settled science
+The strength of the greenhouse effect was first estimated over a hundred years ago. More recent calculations and simulations have only made this estimate slightly more accurate: if the concentrations of atmospheric carbon dioxide double, the planet will be about 3 °C warmer.
 
-The greenhouse effect of carbon dioxide was described in the nineteenth
-century, and by the early twentieth scientists had already estimated how much
-warming a doubling of atmospheric CO₂ would bring. What was once a theoretical
-calculation is now measured directly, year after year.
+Due to rapidly advancing science in the nineteenth century, people learned both about the composition of the atmosphere (78% nitrogen, 21% oxygen, 1% argon and small amounts of other gases including CO₂) and about CO₂ absorbing thermal radiation. With the industrial revolution well underway and more intense mining and burning of coal, some scientists began to wonder whether CO₂ concentrations had increased, and if so, whether this might affect the planet's temperature.
 
-## Why it matters
+The first calculation of the greenhouse effect was made in 1896 by Svante Arrhenius. Beside the effects of CO₂, his calculation included the effect of water vapour, which also acts as a greenhouse gas. Its amount in the atmosphere depends on temperature – warmer air can hold more vapour, and when temperature drops, the vapour condenses and falls as precipitation. Arrhenius concluded that if CO₂ concentrations in the atmosphere doubled, the planet would be about 4 °C warmer due to the combined effect of CO₂ and the increased water vapour present in warmer air.
 
-The physics behind climate change is not new or contested. More than a century
-of research — from laboratory measurements to global observation networks —
-points to the same conclusion, giving today's projections a deep and durable
-foundation.
+Climate sensitivity means how much warmer (or cooler) Earth's surface will get in relation to the change of atmospheric CO₂ concentrations. If the CO₂ concentrations double, it is now estimated that the planet will get 2.5–4.0 °C warmer (the best estimate is 3 °C). This is roughly equivalent to saying that each additional 1,000 Gt of CO₂ in the atmosphere leads to approximately 0.45 °C of warming.
+
+Early computer simulations of global climate began to appear in the 1970s. Physicists who made them already knew the exact concentrations of CO₂ in the atmosphere and how quickly they were rising (see also: *The Changing Balance of Atmospheric CO₂ & O₂*). Their simulations only made Arrhenius' estimate more accurate: if the concentrations of atmospheric CO₂ double, the planet will be about 3 °C warmer. The simulations also showed that the warming will be significantly stronger over the Arctic.
+
+One important milestone was the Charney Report (1979), in which scientific findings on climate change were presented to the US government. The authors warned of the expected negative impacts of future climate change and urged action to reduce CO₂ emissions.
+
+Major oil companies came to the same conclusion around that time. An ExxonMobil internal report from 1982 describes in detail the relationship between Earth's temperature and the concentration of atmospheric CO₂ – with the same estimated climate sensitivity.
+
+Present-day computer simulations model the temperature, humidity, and airflow across atmospheric layers, deep and surface ocean currents, and a wide range of additional factors – including geography, vegetation, clouds, sea ice, glacier trends, and many other variables. Simulations of past climate now match historical records so closely that it is hard to tell which is the real data and which is the model output. These advanced simulations have further reduced uncertainties in the original estimates of climate sensitivity.
+
+When we speak of global warming, it is the average of temperatures from different areas around the world (see also: *Global Map of Temperature Changes*).

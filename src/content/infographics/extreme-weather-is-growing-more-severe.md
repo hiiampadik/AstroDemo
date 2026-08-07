@@ -6,12 +6,26 @@ order: 2
 image: /images/atlas/atlas-_28.png
 ---
 
-## What does the chart show?
+Extremes such as heat waves, droughts, and heavy rainfall occur more frequently and with greater intensity in a world under climate change. With any additional warming, extremes become greater and more pronounced. The graphics depict projected changes in frequency and intensity of selected extreme weather events. Each dot represents one year in a hypothetical set of ten years. Dark dots indicate years with extreme events occurring, light dots years without the extremes. Events that occurred once per decade in the pre-industrial period now occur with higher frequency and are also more intense.
 
-A warmer atmosphere holds more moisture and more energy, loading the dice toward
-fiercer heatwaves, heavier downpours and more intense droughts.
+## Where are we now on the graph?
 
-## Why it matters
+Warming is now (as of 2026) about 1.3 °C relative to the pre-industrial era (See also: *How Much Is the Planet Warming?*) and the 1.5 °C threshold is expected to be reached around 2030.
 
-Each fraction of a degree shifts the odds. Events once called once-in-a-century
-are becoming far more common, straining the systems built for a cooler climate.
+## Weather extremes are connected
+
+Many extreme events are linked to one another in a complex web of mutual influences. For example, heavy precipitation can trigger floods, hot temperature extremes exacerbate or prolong droughts, and droughts may then create conditions for wildfires.
+
+Global warming leads to more droughts and heavy precipitation at the same time. Rising temperatures boost evaporation, which can cause more droughts and also bring more moisture to the atmosphere. A warmer atmosphere can contain significantly more moisture (about 7% more water vapour for each 1 °C), which leads to more intense storms, rainfall, and tropical cyclones.
+
+With climate change, there is slightly more precipitation globally, but the spatial and temporal distribution of this precipitation changes significantly. In general, wetter areas are getting even wetter (tropical and polar regions), whereas drier areas are getting even drier (subtropics like the Mediterranean, the US Southwest, and parts of southern Africa). We are also seeing a shift toward fewer but more intense precipitation events: there are fewer days of rain and instead longer periods of droughts interrupted by downpours.
+
+## Are all extreme weather events caused by climate change?
+
+Not necessarily. Strictly speaking, any given event is never caused by global warming, but the likelihood of it occurring increases with global warming. The role of climate change can be assessed for each event in what is called attribution studies. What do they tell us?
+
+- Heatwaves are very often much more likely to occur because of present warming. In a recent study published in Nature, a group of scientists concluded that out of 213 major heatwaves between 2000 and 2023, climate change has made 55 (over a quarter) of them 10,000+ times more likely – these heatwaves would have been virtually impossible without human influence.
+
+- Some extremes are somewhat more likely to occur due to global warming. For example, the heavy precipitation, which brought devastating floods to Central Europe in September 2024 or to Spain in October 2024, was about twice as likely to occur because of climate change.
+
+- For some events, however, the link to climate change remains weak or absent. A study of the severe drought in southern Madagascar in 2019–21, which caused significant food insecurity, concluded that climate change played only a limited role – natural rainfall variability was the primary driver.

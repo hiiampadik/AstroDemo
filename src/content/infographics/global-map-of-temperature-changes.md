@@ -6,13 +6,20 @@ order: 4
 image: /images/atlas/atlas-_18.png
 ---
 
-## What does the chart show?
+Changes over the last six decades have shown that the warming rate varies across different regions, which is consistent with predictions from computer simulations. The map shows in detail how much temperatures changed between 1961 and 2025 in different parts of the world. Landmasses are warming faster than oceans. The warming is the fastest over the Arctic – the climate above some Arctic islands is now more than 5 °C warmer than it was six decades ago. Europe, with its landmass relatively close to the Arctic, is the fastest warming continent.
 
-Mapping warming across the surface reveals a patchwork: land heats faster than
-sea, and the high Arctic faster than anywhere else — a pattern known as polar
-amplification.
+Nonetheless, there are still regions which are not warming at all or even getting slightly cooler.
 
-## Why it matters
+## Why is the North warming so fast?
 
-Because impacts follow local temperature, not the global average, some regions
-are already experiencing changes far beyond the headline figure of 1.3 °C.
+The amplification of warming over the Arctic Ocean is related to different physical properties of ice and water. While dark ocean water absorbs roughly 90–95% of incoming radiation, and reflects just 5–10%, sea ice reflects up to 90% of it – this degree of reflectance is called albedo.
+
+Due to increasing temperatures over the Arctic Ocean, sea ice is melting. As a result, more water surface is ice-free and more solar radiation is being absorbed, which leads to further warming of the ocean, further temperature increase, more ice melting, and so on.
+
+## Why is the warming not amplified in the South?
+
+The feedback loop of sea ice melting and ocean warming is much less common in the Southern Hemisphere, as the ice in the Antarctic is mainly on land and up to several kilometres thick. When the surface melts, it just uncovers deeper layers of ice, but the albedo remains unchanged.
+
+However, the reasons why some areas around the South Pole are experiencing less warming or even slight cooling are much more complex. E.g., stratospheric ozone acts as a greenhouse gas, so its depletion over Antarctica has had a local cooling effect in the upper atmosphere. Strong westerly winds and ocean currents (notably, the Antarctic Circumpolar Current) circle the continent as a heat barrier. And even the melting of the ice sheet (the result of global warming) adds so much fresh cold water to the sea surface that it leads to its cooling.
+
+Even so, despite such regional cooling trends, the Antarctic continent as a whole is losing ice mass at an accelerating rate, driven primarily by warming ocean waters melting its ice shelves from below. (See also: *rising sea levels* and *tipping points of ice sheets*.)

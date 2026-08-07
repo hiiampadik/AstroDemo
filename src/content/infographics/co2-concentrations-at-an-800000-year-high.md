@@ -15,15 +15,26 @@ related:
   - century-of-climate-science
 ---
 
-## What does the chart show?
+The last time atmospheric CO₂ concentrations were as high as today was around four million years ago. Earth was about 3 °C warmer, sea levels 20 metres higher, mastodons and three-toed horses roamed across Europe, and the earliest human ancestors in Africa were only just beginning to walk consistently upright.
 
-Air bubbles trapped in Antarctic ice let us reconstruct atmospheric CO₂ going
-back 800,000 years. Across that entire span the concentration stayed within a
-natural band — never rising above roughly 300 parts per million. Today it has
-soared well beyond 420 ppm, far outside anything humanity has ever experienced.
+The graph on the left shows a trend in CO₂ concentrations over the last 800,000 years. The data reveal how these concentrations oscillated in glacial and interglacial periods – from 170 ppm to 280 ppm.
 
-## Why it matters
+Zooming in, the graph on the right has a different time scale and shows in detail a trend in CO₂ concentrations over the last 2,000 years. The concentrations were around 280 ppm until the industrial revolution; then they started to rise.
 
-The speed of the change is as striking as its size. Shifts that once unfolded
-over millennia are now happening within a single lifetime, leaving ecosystems
-and societies little time to adapt.
+## How do scientists know the composition of the atmosphere in the past?
+
+Samples of ancient air can be found as bubbles trapped in the ice sheets of Greenland or Antarctica. If you take a sample cut from an ice core drilled deep into an ice sheet and melt it in a laboratory, you can analyse the atmospheric composition at the time the ice formed. The age of the sample depends on how deep you drill. The Antarctic ice sheet is so thick that cores drilled nearly three kilometres down contain air bubbles around 800,000 years old.
+
+## Could present-day climate change be a part of a natural cycle?
+
+We live in an interglacial period and if the cycle continued naturally, Earth would be slowly cooling now – CO₂ concentrations would be slowly declining and another glacial period would start within tens of thousands of years.
+
+The natural cycling between glacial and interglacial periods is driven by variations in Earth's orbital shape as well as the tilt and orientation of its axis, collectively known as Milankovitch cycles. This process triggers a complex system of interrelated changes in which CO₂ as a greenhouse gas plays a major role. But Milankovitch cycles operate on timescales of tens to hundreds of thousands of years – which is why they cannot explain the rapid rise of CO₂ seen in the last 200 years.
+
+The climate change happening now is unrelated to the natural variation of glacial and interglacial periods – current CO₂ concentrations are significantly above the range typical for this variation, and the amount of solar radiation determined by Milankovitch cycles shows no unusual trends for our times.
+
+Moreover, there is ample evidence that the rise in CO₂ concentrations is caused by fossil fuel combustion:
+
+- The rise of CO₂ concentrations corresponds to the amount of fossil fuels burned each year (when some absorption of CO₂ by the ocean is factored).
+- Carbon atoms in CO₂ are not all the same – they exist as different isotopes. Different sources of CO₂ have unique isotopic fingerprints. Because fossil fuels are millions of years old, they contain virtually no ¹⁴C, which decays over time. Isotope analyses of atmospheric CO₂ show declining concentrations of ¹⁴C, meaning that an increasing proportion of atmospheric CO₂ comes from fossil fuel emissions.
+- The rise of CO₂ concentrations is paralleled by the decline of O₂ concentrations, which corresponds to the O₂ loss by burning fossil fuels (See also: *The Changing Balance of Atmospheric CO₂ & O₂*.)
