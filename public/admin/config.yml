@@ -70,3 +70,28 @@ collections:
           value_field: "{{slug}}"
           display_fields: ["title"]
       - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "settings"
+    label: "Settings"
+    files:
+      - name: "navigation"
+        label: "Navigation & Languages"
+        file: "src/data/site.json"
+        description: "Header menu links and the language versions shown in the switcher."
+        fields:
+          - label: "Menu links"
+            name: "menuLinks"
+            label_singular: "Menu link"
+            widget: "list"
+            fields:
+              - { label: "Label", name: "label", widget: "string" }
+              - { label: "URL", name: "url", widget: "string" }
+          - label: "Language versions"
+            name: "languages"
+            label_singular: "Language"
+            widget: "list"
+            summary: "{{fields.code}}"
+            fields:
+              - { label: "Code", name: "code", widget: "string", hint: "Shown in the switcher, e.g. EN" }
+              - { label: "Flag emoji", name: "flag", widget: "string", required: false }
+              - { label: "URL", name: "url", widget: "string", hint: "Link to that language's site" }

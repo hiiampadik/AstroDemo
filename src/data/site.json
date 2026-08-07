@@ -1,0 +1,10 @@
+{
+  "menuLinks": [
+    { "label": "Facts on Climate", "url": "#" }
+  ],
+  "languages": [
+    { "code": "CZ", "flag": "🇨🇿", "url": "#" },
+    { "code": "FR", "flag": "🇫🇷", "url": "#" },
+    { "code": "EN", "flag": "🇬🇧", "url": "#" }
+  ]
+}

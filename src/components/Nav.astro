@@ -11,10 +11,17 @@ import GlobeIcon from './icons/GlobeIcon.astro';
 
 interface Sibling {
   code: string;
-  flag: string;
+  flag?: string;
+  url: string;
+}
+interface MenuLink {
+  label: string;
   url: string;
 }
 interface Props {
+  /** Header menu links (edited in the CMS: Settings → Navigation). */
+  menuLinks?: MenuLink[];
+  /** Language versions for the switcher (CMS: Settings → Navigation). */
   siblings?: Sibling[];
   brandHref?: string;
   /** Start (and stay) in the compact bar — used on detail pages. */
@@ -22,14 +29,9 @@ interface Props {
   class?: string;
 }
 
-const defaultSiblings: Sibling[] = [
-  { code: 'CZ', flag: '🇨🇿', url: '#' },
-  { code: 'FR', flag: '🇫🇷', url: '#' },
-  { code: 'EN', flag: '🇬🇧', url: '#' },
-];
-
 const {
-  siblings = defaultSiblings,
+  menuLinks = [],
+  siblings = [],
   brandHref = import.meta.env.BASE_URL,
   compact = false,
   class: className,
@@ -48,8 +50,11 @@ const {
     </a>
 
     <nav class="nav__links" aria-label="Primary">
-      <a class="nav__link type-nav-link" href="#">About</a>
-      <a class="nav__link type-nav-link" href="#">Facts on Climate</a>
+      {
+        menuLinks.map((l) => (
+          <a class="nav__link type-nav-link" href={l.url}>{l.label}</a>
+        ))
+      }
 
       <div class="nav__lang" data-lang>
         <button

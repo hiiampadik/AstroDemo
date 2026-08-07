@@ -12,6 +12,7 @@ import CodeIcon from '../components/icons/CodeIcon.astro';
 import { chapterName } from '../data/chapters';
 import { getFlatInfographics } from '../data/infographics';
 import { imgUrl } from '../utils/img';
+import site from '../data/site.json';
 
 export async function getStaticPaths() {
   const flat = await getFlatInfographics();
@@ -58,7 +59,7 @@ const href = (slug: string) => `${base}/${slug}/`;
 
 <Layout title={`${title} — Atlas of Climate Change`} fullWidth>
   <FancyBar />
-  <Nav compact />
+  <Nav compact menuLinks={site.menuLinks} siblings={site.languages} />
 
   <!-- Fixed split background (same as the feed). -->
   <div class="detail-bg" aria-hidden="true">

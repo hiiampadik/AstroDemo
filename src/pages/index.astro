@@ -9,6 +9,7 @@ import ArticleCard from '../components/feed/ArticleCard.astro';
 import ArticleSmall from '../components/feed/ArticleSmall.astro';
 import SiteFooter from '../components/feed/SiteFooter.astro';
 import { getChapters } from '../data/infographics';
+import site from '../data/site.json';
 
 const chapters = await getChapters();
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -17,7 +18,7 @@ const detailHref = (slug: string) => `${base}/${slug}/`;
 
 <Layout title="Atlas of Climate Change" fullWidth>
   <FancyBar />
-  <Nav />
+  <Nav menuLinks={site.menuLinks} siblings={site.languages} />
 
   <div class="feed" data-view="list">
     <!-- Fixed split background — stays put while the page scrolls. -->
