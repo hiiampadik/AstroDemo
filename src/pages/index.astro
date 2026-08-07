@@ -8,8 +8,9 @@ import ViewToggle from '../components/feed/ViewToggle.astro';
 import ArticleCard from '../components/feed/ArticleCard.astro';
 import ArticleSmall from '../components/feed/ArticleSmall.astro';
 import SiteFooter from '../components/feed/SiteFooter.astro';
-import { chapters } from '../data/atlas';
+import { getChapters } from '../data/infographics';
 
+const chapters = await getChapters();
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const detailHref = (slug: string) => `${base}/${slug}`;
 ---
@@ -34,7 +35,7 @@ const detailHref = (slug: string) => `${base}/${slug}`;
     <div class="feed__center">
       <div class="feed__main">
         <aside class="feed__sidebar-col">
-          <div class="feed__sidebar-sticky"><SideNav /></div>
+          <div class="feed__sidebar-sticky"><SideNav chapters={chapters} /></div>
         </aside>
 
         <div class="feed__content">

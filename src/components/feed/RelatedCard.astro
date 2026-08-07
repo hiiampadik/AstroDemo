@@ -9,9 +9,9 @@ interface Props {
   image: string;
   href: string;
 }
+import { imgUrl } from '../../utils/img';
 const { title, image, href } = Astro.props;
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const src = `${base}/images/atlas/${image}`;
+const src = imgUrl(image);
 ---
 
 <a class="related" href={href}>

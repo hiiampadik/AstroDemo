@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import FancyBar from '../components/FancyBar.astro';
 import Nav from '../components/Nav.astro';
@@ -8,31 +9,54 @@ import Button from '../components/Button.astro';
 import RelatedCard from '../components/feed/RelatedCard.astro';
 import ExternalLinkIcon from '../components/icons/ExternalLinkIcon.astro';
 import CodeIcon from '../components/icons/CodeIcon.astro';
-import { chapters } from '../data/atlas';
+import { chapterName } from '../data/chapters';
+import { getFlatInfographics } from '../data/infographics';
+import { imgUrl } from '../utils/img';
 
-export function getStaticPaths() {
-  const flat: any[] = [];
-  for (const ch of chapters) {
-    for (const ig of ch.infographics) {
-      flat.push({ ...ig, chapterName: ch.name, chapterId: ch.id });
-    }
-  }
-  return flat.map((item, i) => ({
-    params: { slug: item.slug },
-    props: {
-      item,
-      related: [flat[(i + 1) % flat.length], flat[(i + 2) % flat.length]],
-    },
-  }));
+export async function getStaticPaths() {
+  const flat = await getFlatInfographics();
+  const lookup = new Map(flat.map((f) => [f.slug, f]));
+
+  const entries = await getCollection('infographics');
+  const entryBySlug = new Map(entries.map((e) => [e.slug, e]));
+
+  return flat.map((item, i) => {
+    const entry = entryBySlug.get(item.slug)!;
+
+    // Related: prefer the CMS relation list, else the next 2 (wrapping).
+    const relatedSlugs =
+      entry.data.related && entry.data.related.length
+        ? entry.data.related
+        : [flat[(i + 1) % flat.length].slug, flat[(i + 2) % flat.length].slug];
+    const related = relatedSlugs
+      .map((s) => lookup.get(s))
+      .filter(Boolean)
+      .map((r) => ({ slug: r!.slug, title: r!.title, image: r!.image }));
+
+    return { params: { slug: item.slug }, props: { item, entry, related } };
+  });
 }
 
-const { item, related } = Astro.props;
+const { item, entry, related } = Astro.props;
+const data = entry.data;
+const { Content } = await entry.render();
+
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const imgSrc = `${base}/images/atlas/${item.image}`;
+
+const title = data.title;
+const lead = data.lead;
+const chapterLabel = chapterName(data.chapter);
+const imgSrc = imgUrl(data.image);
+
+const pdfHref = data.downloads?.pdf || null;
+const tableUrl = data.data?.tableUrl || '#';
+const sourceUrl = data.data?.sourceUrl || '#';
+const citation = data.data?.citation || '';
+
 const href = (slug: string) => `${base}/${slug}`;
 ---
 
-<Layout title={`${item.title} — Atlas of Climate Change`} fullWidth>
+<Layout title={`${title} — Atlas of Climate Change`} fullWidth>
   <FancyBar />
   <Nav compact />
 
@@ -57,7 +81,9 @@ const href = (slug: string) => `${base}/${slug}`;
               <section class="meta__block">
                 <h2 class="meta__label type-eyebrow">Download</h2>
                 <ButtonGroup direction="row">
-                  <Button variant="text" tone="secondary" href="#">PDF</Button>
+                  {pdfHref && (
+                    <Button variant="text" tone="secondary" href={`${base}${pdfHref}`}>PDF</Button>
+                  )}
                   <Button variant="text" tone="secondary" href={imgSrc}>PNG</Button>
                 </ButtonGroup>
               </section>
@@ -66,25 +92,29 @@ const href = (slug: string) => `${base}/${slug}`;
                 <h2 class="meta__label type-eyebrow">Underlying data</h2>
                 <div class="meta__data">
                   <ButtonGroup direction="column">
-                    <Button variant="text" tone="secondary" href="#">
+                    <Button variant="text" tone="secondary" href={tableUrl}>
                       <ExternalLinkIcon slot="icon-left" size={16} />
                       Our data table
                     </Button>
-                    <Button variant="text" tone="secondary" href="#">
+                    <Button variant="text" tone="secondary" href={sourceUrl}>
                       <CodeIcon slot="icon-left" size={16} />
                       Data source
                     </Button>
                   </ButtonGroup>
-                  <p class="meta__source type-small">NASA Goddard Institute for Space Studies</p>
+                  {citation && <p class="meta__source type-small">{citation}</p>}
                 </div>
               </section>
 
-              <section class="meta__block">
-                <h2 class="meta__label type-eyebrow">More articles</h2>
-                <div class="meta__related">
-                  {related.map((r) => <RelatedCard title={r.title} image={r.image} href={href(r.slug)} />)}
-                </div>
-              </section>
+              {related.length > 0 && (
+                <section class="meta__block">
+                  <h2 class="meta__label type-eyebrow">More articles</h2>
+                  <div class="meta__related">
+                    {related.map((r) => (
+                      <RelatedCard title={r.title} image={r.image} href={href(r.slug)} />
+                    ))}
+                  </div>
+                </section>
+              )}
             </div>
           </div>
         </aside>
@@ -92,48 +122,20 @@ const href = (slug: string) => `${base}/${slug}`;
         <div class="detail__content">
           <div class="detail__hero">
             <div class="detail__hero-inner">
-              <Tag label={item.chapterName} showIcon={false} />
+              <Tag label={chapterLabel} showIcon={false} />
               <div class="detail__titles">
-                <h1 class="detail__title type-title">{item.title}</h1>
-                <p class="detail__lead type-lead">{item.lead}</p>
+                <h1 class="detail__title type-title">{title}</h1>
+                <p class="detail__lead type-lead">{lead}</p>
               </div>
               <div class="detail__media">
-                <img src={imgSrc} alt={item.title} />
+                <img src={imgSrc} alt={title} />
               </div>
             </div>
           </div>
 
           <div class="detail__body">
-            <p class="detail__intro type-subheading">
-              {item.lead} A higher concentration of greenhouse gases in the atmosphere
-              sets off a long chain of interconnected impacts across the whole climate system.
-            </p>
-
-            <div class="detail__sections">
-              <section class="detail__section">
-                <h2>What does the chart show?</h2>
-                <p>
-                  This is placeholder text for the detail body. In the final site each
-                  infographic carries its own commentary, edited in the CMS and rendered
-                  here as free markdown — an explanation of what the graphic depicts, how
-                  to read it, and the key figures behind it.
-                </p>
-                <p>
-                  The data is compiled from measurements taken across land, sea and
-                  atmosphere, and cross-checked against independent scientific datasets to
-                  keep the picture as accurate and up to date as possible.
-                </p>
-              </section>
-
-              <section class="detail__section">
-                <h2>Why it matters</h2>
-                <p>
-                  Every fraction of a degree of warming compounds across ecosystems and
-                  societies. For the wider context, see the related infographic
-                  {' '}<a href={href(related[0].slug)}>{related[0].title}</a>, which places
-                  this trend alongside the forces that drive it.
-                </p>
-              </section>
+            <div class="detail__prose">
+              <Content />
             </div>
           </div>
         </div>
@@ -336,4 +338,40 @@ const href = (slug: string) => `${base}/${slug}`;
     text-underline-position: from-font;
   }
   .detail__section a:hover { color: var(--blue-600); }
+
+  /* Rendered markdown body (from the CMS). */
+  .detail__prose { max-width: 600px; }
+  .detail__prose :global(h2) {
+    margin: var(--size-8) 0 var(--size-3);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 1.2;
+    color: var(--text-primary);
+  }
+  .detail__prose :global(h2:first-child) { margin-top: 0; }
+  .detail__prose :global(p) {
+    margin: 0 0 var(--size-4);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--text-primary);
+  }
+  .detail__prose :global(ul),
+  .detail__prose :global(ol) {
+    margin: 0 0 var(--size-4);
+    padding-left: var(--size-6);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--text-primary);
+  }
+  .detail__prose :global(li) { margin-bottom: var(--size-2); }
+  .detail__prose :global(a) {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-position: from-font;
+  }
+  .detail__prose :global(a:hover) { color: var(--blue-600); }
 </style>

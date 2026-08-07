@@ -6,7 +6,12 @@
  * active chapter and `.is-current` on the active infographic; the dot next to
  * the current infographic shows only in list view.
  */
-import { chapters } from '../../data/atlas';
+import type { FeedChapter } from '../../data/infographics';
+
+interface Props {
+  chapters: FeedChapter[];
+}
+const { chapters } = Astro.props;
 ---
 
 <nav class="sidenav" aria-label="Table of contents">

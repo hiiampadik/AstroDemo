@@ -5,17 +5,74 @@ backend:
   base_url: https://decap-oauth.brona-musil.workers.dev
   auth_endpoint: /auth
 
+local_backend: true
+
 media_folder: "public/images"
 public_folder: "/images"
 
 collections:
-  - name: "subpages"
-    label: "Subpages"
-    folder: "src/content/subpages"
+  - name: "infographics"
+    label: "Infographics"
+    label_singular: "Infographic"
+    folder: "src/content/infographics"
     create: true
     slug: "{{slug}}"
+    identifier_field: "title"
+    summary: "{{title}}  ·  {{chapter}}"
+    sortable_fields:
+      fields: ["order", "chapter", "title"]
+      default:
+        field: "order"
+        direction: "ascending"
+    view_groups:
+      - label: "Chapter"
+        field: "chapter"
     fields:
       - { label: "Title", name: "title", widget: "string" }
-      - { label: "Subtitle", name: "subtitle", widget: "string" }
-      - { label: "Graphic (SVG)", name: "graphic", widget: "file", file_extensions: ["svg"] }
-      - { label: "Body Paragraph", name: "body", widget: "markdown" }
+      - { label: "Lead", name: "lead", widget: "text", hint: "Short intro shown in the feed and above the chart." }
+      - label: "Chapter"
+        name: "chapter"
+        widget: "select"
+        options:
+          - { label: "Introduction", value: "introduction" }
+          - { label: "The Science", value: "the-science" }
+          - { label: "The Impacts", value: "the-impacts" }
+          - { label: "The Trajectory", value: "the-trajectory" }
+          - { label: "The Solutions", value: "the-solutions" }
+      - { label: "Order", name: "order", widget: "number", value_type: "int", default: 1, hint: "Position within the chapter." }
+      - label: "Graphic"
+        name: "image"
+        widget: "image"
+        media_folder: "/public/images/atlas"
+        public_folder: "/images/atlas"
+        hint: "The infographic image. Also offered as a PNG download."
+      - label: "Downloads"
+        name: "downloads"
+        widget: "object"
+        required: false
+        collapsed: true
+        fields:
+          - { label: "PDF", name: "pdf", widget: "file", required: false }
+      - label: "Underlying data"
+        name: "data"
+        widget: "object"
+        required: false
+        collapsed: true
+        fields:
+          - { label: "Data table URL", name: "tableUrl", widget: "string", required: false }
+          - { label: "Data source URL", name: "sourceUrl", widget: "string", required: false }
+          - { label: "Source citation", name: "citation", widget: "string", required: false, hint: "e.g. NASA Goddard Institute for Space Studies" }
+      - label: "Related infographics"
+        name: "related"
+        widget: "list"
+        required: false
+        summary: "{{fields.slug}}"
+        field:
+          label: "Infographic"
+          name: "slug"
+          widget: "relation"
+          collection: "infographics"
+          search_fields: ["title"]
+          value_field: "{{slug}}"
+          display_fields: ["title"]
+      - { label: "Body", name: "body", widget: "markdown" }
