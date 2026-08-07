@@ -1,42 +1,339 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import FancyBar from '../components/FancyBar.astro';
+import Nav from '../components/Nav.astro';
+import Tag from '../components/Tag.astro';
+import ButtonGroup from '../components/ButtonGroup.astro';
+import Button from '../components/Button.astro';
+import RelatedCard from '../components/feed/RelatedCard.astro';
+import ExternalLinkIcon from '../components/icons/ExternalLinkIcon.astro';
+import CodeIcon from '../components/icons/CodeIcon.astro';
+import { chapters } from '../data/atlas';
 
-export async function getStaticPaths() {
-  const subpages = await getCollection('subpages');
-  return subpages.map((page) => ({
-    params: { slug: page.slug },
-    props: { page },
+export function getStaticPaths() {
+  const flat: any[] = [];
+  for (const ch of chapters) {
+    for (const ig of ch.infographics) {
+      flat.push({ ...ig, chapterName: ch.name, chapterId: ch.id });
+    }
+  }
+  return flat.map((item, i) => ({
+    params: { slug: item.slug },
+    props: {
+      item,
+      related: [flat[(i + 1) % flat.length], flat[(i + 2) % flat.length]],
+    },
   }));
 }
 
-interface Props {
-  page: CollectionEntry<'subpages'>;
-}
-
-const { page } = Astro.props;
-const { title, subtitle, graphic } = page.data;
-const { Content } = await page.render();
-
-const base = import.meta.env.BASE_URL;
-// Frontmatter stores root-absolute paths (e.g. /images/foo.svg); prefix the
-// deploy base so they resolve under the GitHub Pages subpath.
-const graphicSrc = `${base}${graphic}`;
+const { item, related } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const imgSrc = `${base}/images/atlas/${item.image}`;
+const href = (slug: string) => `${base}/${slug}`;
 ---
 
-<Layout title={title}>
-  <main>
-    <article>
-      <header>
-        <h1>{title}</h1>
-        <h2>{subtitle}</h2>
-      </header>
+<Layout title={`${item.title} — Atlas of Climate Change`} fullWidth>
+  <FancyBar />
+  <Nav compact />
 
-      <img src={graphicSrc} alt={title} />
+  <!-- Fixed split background (same as the feed). -->
+  <div class="detail-bg" aria-hidden="true">
+    <div class="detail-bg__fill detail-bg__fill--left"></div>
+    <div class="detail-bg__center">
+      <div class="detail-bg__col detail-bg__col--sidebar"></div>
+      <div class="detail-bg__col detail-bg__col--content"></div>
+    </div>
+    <div class="detail-bg__fill detail-bg__fill--right"></div>
+  </div>
 
-      <Content />
-    </article>
+  <div class="detail">
+    <div class="detail__spacer"></div>
 
-    <p><a href={base}>&larr; Back to all subpages</a></p>
-  </main>
+    <div class="detail__center">
+      <div class="detail__main">
+        <aside class="detail__sidebar-col">
+          <div class="detail__sidebar-sticky">
+            <div class="meta">
+              <section class="meta__block">
+                <h2 class="meta__label type-eyebrow">Download</h2>
+                <ButtonGroup direction="row">
+                  <Button variant="text" tone="secondary" href="#">PDF</Button>
+                  <Button variant="text" tone="secondary" href={imgSrc}>PNG</Button>
+                </ButtonGroup>
+              </section>
+
+              <section class="meta__block">
+                <h2 class="meta__label type-eyebrow">Underlying data</h2>
+                <div class="meta__data">
+                  <ButtonGroup direction="column">
+                    <Button variant="text" tone="secondary" href="#">
+                      <ExternalLinkIcon slot="icon-left" size={16} />
+                      Our data table
+                    </Button>
+                    <Button variant="text" tone="secondary" href="#">
+                      <CodeIcon slot="icon-left" size={16} />
+                      Data source
+                    </Button>
+                  </ButtonGroup>
+                  <p class="meta__source type-small">NASA Goddard Institute for Space Studies</p>
+                </div>
+              </section>
+
+              <section class="meta__block">
+                <h2 class="meta__label type-eyebrow">More articles</h2>
+                <div class="meta__related">
+                  {related.map((r) => <RelatedCard title={r.title} image={r.image} href={href(r.slug)} />)}
+                </div>
+              </section>
+            </div>
+          </div>
+        </aside>
+
+        <div class="detail__content">
+          <div class="detail__hero">
+            <div class="detail__hero-inner">
+              <Tag label={item.chapterName} showIcon={false} />
+              <div class="detail__titles">
+                <h1 class="detail__title type-title">{item.title}</h1>
+                <p class="detail__lead type-lead">{item.lead}</p>
+              </div>
+              <div class="detail__media">
+                <img src={imgSrc} alt={item.title} />
+              </div>
+            </div>
+          </div>
+
+          <div class="detail__body">
+            <p class="detail__intro type-subheading">
+              {item.lead} A higher concentration of greenhouse gases in the atmosphere
+              sets off a long chain of interconnected impacts across the whole climate system.
+            </p>
+
+            <div class="detail__sections">
+              <section class="detail__section">
+                <h2>What does the chart show?</h2>
+                <p>
+                  This is placeholder text for the detail body. In the final site each
+                  infographic carries its own commentary, edited in the CMS and rendered
+                  here as free markdown — an explanation of what the graphic depicts, how
+                  to read it, and the key figures behind it.
+                </p>
+                <p>
+                  The data is compiled from measurements taken across land, sea and
+                  atmosphere, and cross-checked against independent scientific datasets to
+                  keep the picture as accurate and up to date as possible.
+                </p>
+              </section>
+
+              <section class="detail__section">
+                <h2>Why it matters</h2>
+                <p>
+                  Every fraction of a degree of warming compounds across ecosystems and
+                  societies. For the wider context, see the related infographic
+                  {' '}<a href={href(related[0].slug)}>{related[0].title}</a>, which places
+                  this trend alongside the forces that drive it.
+                </p>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail__spacer"></div>
+  </div>
 </Layout>
+
+<style is:global>
+  body { padding: 0; }
+</style>
+
+<style>
+  .detail {
+    --top-clear: 89px; /* FancyBar 20 + compact nav 69 */
+    --sticky-top: 100px;
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    /* clip (not hidden) so the hero's right bleed can't add a horizontal
+       scrollbar, while keeping the sticky sidebar working */
+    overflow-x: clip;
+    overflow-y: visible;
+  }
+
+  /* Fixed split background */
+  .detail-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    display: flex;
+    pointer-events: none;
+  }
+  .detail-bg__fill { flex: 1 1 0; min-width: var(--size-4); }
+  .detail-bg__fill--left { background: var(--blue-gray-200); }
+  .detail-bg__fill--right { background: var(--blue-gray-100); }
+  .detail-bg__center {
+    flex: 0 1 1280px;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: 290px minmax(0, 1fr);
+  }
+  .detail-bg__col--sidebar { background: var(--blue-gray-200); }
+  .detail-bg__col--content { background: var(--blue-gray-100); }
+
+  .detail__spacer { flex: 1 1 0; min-width: var(--size-4); }
+
+  .detail__center {
+    position: relative;
+    z-index: 1;
+    flex: 0 1 1280px;
+    min-width: 0;
+    display: flex;
+  }
+  .detail__main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 290px minmax(0, 1fr);
+    min-width: 0;
+  }
+
+  /* Sidebar meta panel */
+  .detail__sidebar-col {
+    padding: calc(var(--top-clear) + 48px) var(--size-9) 0 0; /* right gap 36 */
+    border-right: 1px solid var(--blue-gray-100);
+  }
+  .detail__sidebar-sticky {
+    position: sticky;
+    top: var(--sticky-top);
+  }
+  .meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-10); /* 40px */
+    align-items: flex-start;
+  }
+  .meta__block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* button groups hug, source/related stretch */
+    gap: var(--size-4); /* 16px */
+    width: 100%;
+  }
+  /* Left-align the content inside the sidebar buttons. */
+  .meta :global(.btn) { justify-content: flex-start; }
+  .meta__label {
+    margin: 0;
+    color: var(--text-primary);
+  }
+  .meta__data {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+    gap: var(--size-2);
+  }
+  .meta__source {
+    align-self: stretch;
+    margin: 0;
+    color: var(--text-tertiary);
+  }
+  .meta__related {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-3);
+  }
+
+  /* Content */
+  .detail__content { position: relative; min-width: 0; }
+
+  .detail__hero {
+    position: relative;
+    z-index: 0;
+    padding: calc(var(--top-clear) + 64px) 0 var(--size-16) var(--size-24); /* left 96, bottom 64 */
+  }
+  /* White band that bleeds to the right viewport edge (clipped by .detail). */
+  .detail__hero::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: 0 -100vw 0 0;
+    background: var(--white);
+  }
+  .detail__hero-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* tag hugs its content instead of stretching */
+    gap: var(--size-6); /* 24px */
+    max-width: 894px;
+  }
+  .detail__titles {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-2); /* 8px */
+    width: 100%;
+    margin-top: var(--size-2-5); /* small gap after tag (design 18) */
+  }
+  .detail__title {
+    margin: 0;
+    color: var(--text-primary);
+  }
+  .detail__lead {
+    margin: 0;
+    color: var(--text-primary);
+  }
+  .detail__media {
+    width: 100%;
+    aspect-ratio: 894 / 460;
+    overflow: hidden;
+    border-radius: var(--size-2);
+  }
+  .detail__media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .detail__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-12); /* 48px */
+    padding: var(--size-16) 0 var(--size-24) var(--size-24); /* top 64, left 96, bottom 96 */
+    max-width: 894px;
+  }
+  .detail__intro {
+    margin: 0;
+    color: var(--text-primary);
+  }
+  .detail__sections {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-8); /* 32px */
+    max-width: 600px;
+  }
+  .detail__section { display: flex; flex-direction: column; gap: var(--size-3); }
+  .detail__section h2 {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 1.2;
+    color: var(--text-primary);
+  }
+  .detail__section p {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--text-primary);
+  }
+  .detail__section a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-position: from-font;
+  }
+  .detail__section a:hover { color: var(--blue-600); }
+</style>

@@ -1,29 +1,298 @@
 ---
-import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import FancyBar from '../components/FancyBar.astro';
+import Nav from '../components/Nav.astro';
+import Tag from '../components/Tag.astro';
+import SideNav from '../components/feed/SideNav.astro';
+import ViewToggle from '../components/feed/ViewToggle.astro';
+import ArticleCard from '../components/feed/ArticleCard.astro';
+import ArticleSmall from '../components/feed/ArticleSmall.astro';
+import SiteFooter from '../components/feed/SiteFooter.astro';
+import { chapters } from '../data/atlas';
 
-const subpages = await getCollection('subpages');
-const base = import.meta.env.BASE_URL;
-
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const detailHref = (slug: string) => `${base}/${slug}`;
 ---
 
-<Layout title="Home">
-  <main>
-    <header>
-      <h1>Home</h1>
-      <h2>A list of subpages managed via Decap CMS</h2>
-    </header>
+<Layout title="Atlas of Climate Change" fullWidth>
+  <FancyBar />
+  <Nav />
 
-    <nav aria-label="Subpages">
-      <ul>
-        {
-          subpages.map((page) => (
-            <li>
-              <a href={`${base}/${page.slug}`}>{page.data.title}</a>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
-  </main>
+  <div class="feed" data-view="grid">
+    <!-- Fixed split background — stays put while the page scrolls. -->
+    <div class="feed-bg" aria-hidden="true">
+      <div class="feed-bg__fill feed-bg__fill--left"></div>
+      <div class="feed-bg__center">
+        <div class="feed-bg__col feed-bg__col--sidebar"></div>
+        <div class="feed-bg__col feed-bg__col--content"></div>
+      </div>
+      <div class="feed-bg__fill feed-bg__fill--right"></div>
+    </div>
+
+    <div class="feed__spacer"></div>
+
+    <div class="feed__center">
+      <div class="feed__main">
+        <aside class="feed__sidebar-col">
+          <div class="feed__sidebar-sticky"><SideNav /></div>
+        </aside>
+
+        <div class="feed__content">
+          <div class="feed__toolbar"><ViewToggle initial="grid" /></div>
+
+          <!-- Grid view -->
+          <div class="feed__view feed__view--grid" data-view-panel="grid">
+            {
+              chapters.map((ch) => (
+                <section class="section" data-chapter={ch.id}>
+                  <header class="section__header">
+                    <Tag label={ch.name} showIcon={false} />
+                    <h2 class="section__title type-display">{ch.tagline}</h2>
+                  </header>
+                  <div class="section__grid">
+                    {ch.infographics.map((ig) => (
+                      <ArticleSmall
+                        title={ig.title}
+                        image={ig.image}
+                        slug={ig.slug}
+                        chapterId={ch.id}
+                        href={detailHref(ig.slug)}
+                      />
+                    ))}
+                  </div>
+                </section>
+              ))
+            }
+          </div>
+
+          <!-- List view -->
+          <div class="feed__view feed__view--list" data-view-panel="list" hidden>
+            {
+              chapters.map((ch) => (
+                <section class="section" data-chapter={ch.id}>
+                  <header class="section__header">
+                    <Tag label={ch.name} showIcon={false} />
+                    <h2 class="section__title type-display">{ch.tagline}</h2>
+                  </header>
+                  <div class="section__column">
+                    {ch.infographics.map((ig) => (
+                      <ArticleCard
+                        title={ig.title}
+                        lead={ig.lead}
+                        image={ig.image}
+                        slug={ig.slug}
+                        chapterId={ch.id}
+                        href={detailHref(ig.slug)}
+                      />
+                    ))}
+                  </div>
+                </section>
+              ))
+            }
+          </div>
+
+          <SiteFooter />
+        </div>
+      </div>
+    </div>
+
+    <div class="feed__spacer"></div>
+  </div>
 </Layout>
+
+<style is:global>
+  /* This page is full-bleed — drop the demo body padding. */
+  body { padding: 0; }
+</style>
+
+<style>
+  .feed {
+    --feed-top: 280px; /* clears the fixed FancyBar + hero nav on load */
+    --sticky-top: 110px; /* clears the collapsed nav while scrolling */
+    position: relative;
+    display: flex;
+    align-items: stretch;
+  }
+
+  /* Fixed split-background layer — never repaints on scroll, so the column
+     tints can't flash to white. Mirrors the content columns exactly. */
+  .feed-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    display: flex;
+    pointer-events: none;
+  }
+  .feed-bg__fill { flex: 1 1 0; min-width: var(--size-4); }
+  .feed-bg__fill--left { background: var(--blue-gray-200); }
+  .feed-bg__fill--right { background: var(--blue-gray-100); }
+  .feed-bg__center {
+    flex: 0 1 1280px;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: 290px minmax(0, 1fr);
+  }
+  .feed-bg__col--sidebar { background: var(--blue-gray-200); }
+  .feed-bg__col--content { background: var(--blue-gray-100); }
+
+  /* Layout spacers — same flex sizing as the background fills so the content
+     columns line up over the tints. */
+  .feed__spacer { flex: 1 1 0; min-width: var(--size-4); }
+
+  .feed__center {
+    position: relative;
+    z-index: 1;
+    flex: 0 1 1280px;
+    min-width: 0;
+    display: flex;
+  }
+
+  .feed__main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 290px minmax(0, 1fr);
+    min-width: 0;
+  }
+
+  .feed__sidebar-col {
+    padding: var(--feed-top) var(--size-9) 0 0; /* right gap 36 */
+  }
+  .feed__sidebar-sticky {
+    position: sticky;
+    top: var(--sticky-top);
+  }
+
+  .feed__content {
+    position: relative;
+    min-width: 0;
+    padding: var(--feed-top) 0 0 var(--size-24); /* left inset 96 */
+  }
+
+  .feed__toolbar {
+    position: absolute;
+    top: calc(var(--feed-top) + 4px);
+    right: 0;
+    z-index: 5;
+  }
+
+  /* Sections */
+  .section { scroll-margin-top: var(--sticky-top); }
+  .section + .section { margin-top: var(--size-16); } /* 64px */
+
+  .section__header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* tags hug their content instead of stretching */
+    gap: var(--size-2); /* 8px */
+  }
+  .feed__view--grid .section__header { margin-bottom: 50px; }
+  .feed__view--list .section__header { margin-bottom: var(--size-9); } /* 36px */
+
+  .section__title {
+    margin: 0;
+    color: var(--text-primary);
+  }
+
+  .section__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: var(--size-4); /* 16px */
+    row-gap: var(--size-8); /* 32px */
+  }
+
+  .section__column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-10); /* 40px */
+  }
+</style>
+
+<script>
+  const feed = document.querySelector('.feed');
+  if (feed) {
+    const sidenav = feed.querySelector('.sidenav');
+    const OFFSET = 150; // viewport-top line for the "current" infographic
+
+    const visiblePanel = () => feed.querySelector('.feed__view:not([hidden])');
+
+    function setActive(slug, chapterId) {
+      sidenav.querySelectorAll('.chapter').forEach((ch) => {
+        ch.classList.toggle('is-active', ch.getAttribute('data-chapter') === chapterId);
+      });
+      sidenav.querySelectorAll('.toc-link').forEach((l) => {
+        l.classList.toggle('is-current', l.getAttribute('data-slug') === slug);
+      });
+    }
+
+    function onScroll() {
+      const panel = visiblePanel();
+      if (!panel) return;
+
+      // Active section = the last one whose top has crossed the offset line.
+      const sections = panel.querySelectorAll('.section[data-chapter]');
+      let activeSection = sections[0] || null;
+      sections.forEach((s) => {
+        if (s.getBoundingClientRect().top - OFFSET <= 0) activeSection = s;
+      });
+      if (!activeSection) return;
+
+      // Current infographic within that section (fallback: its first card, so
+      // landing on a section header highlights that section, not the previous).
+      const cards = activeSection.querySelectorAll('[data-slug]');
+      let currentCard = cards[0] || null;
+      cards.forEach((c) => {
+        if (c.getBoundingClientRect().top - OFFSET <= 0) currentCard = c;
+      });
+
+      setActive(
+        currentCard ? currentCard.getAttribute('data-slug') : null,
+        activeSection.getAttribute('data-chapter')
+      );
+    }
+
+    let ticking = false;
+    const requestTick = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        onScroll();
+        ticking = false;
+      });
+    };
+    onScroll();
+    window.addEventListener('scroll', requestTick, { passive: true });
+    window.addEventListener('resize', requestTick, { passive: true });
+
+    // Clicking a TOC entry scrolls to the matching item in the visible panel.
+    sidenav.addEventListener('click', (event) => {
+      const link = event.target.closest('[data-slug], [data-chapter-link]');
+      if (!link) return;
+      event.preventDefault();
+      const panel = visiblePanel();
+      const slug = link.getAttribute('data-slug');
+      const chapterId = link.getAttribute('data-chapter-link');
+      let target = null;
+      if (slug) target = panel.querySelector('[data-slug="' + slug + '"]');
+      else if (chapterId) target = panel.querySelector('.section[data-chapter="' + chapterId + '"]');
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // Grid / list toggle.
+    const buttons = feed.querySelectorAll('[data-view-btn]');
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const view = btn.getAttribute('data-view-btn');
+        feed.setAttribute('data-view', view);
+        feed.querySelectorAll('.feed__view').forEach((panel) => {
+          panel.hidden = panel.getAttribute('data-view-panel') !== view;
+        });
+        buttons.forEach((b) => {
+          const active = b === btn;
+          b.classList.toggle('is-active', active);
+          b.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+        onScroll();
+      });
+    });
+  }
+</script>

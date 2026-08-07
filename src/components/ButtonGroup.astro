@@ -1,0 +1,41 @@
+---
+/**
+ * ButtonGroup — Figma node 85:1090.
+ * A bordered container that joins Button / IconButton children with 1px
+ * separators. Children should be borderless (Button variant="text" or
+ * IconButton variant="simple"); the group supplies the frame + dividers.
+ * `direction` = row | column.
+ */
+interface Props {
+  direction?: 'row' | 'column';
+  class?: string;
+}
+const { direction = 'row', class: className } = Astro.props;
+---
+
+<div class:list={['buttongroup', `buttongroup--${direction}`, className]}>
+  <slot />
+</div>
+
+<style>
+  .buttongroup {
+    display: inline-flex;
+    align-items: stretch;
+    background: var(--white);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--size-1-5); /* 6px */
+    overflow: hidden;
+  }
+  .buttongroup--row { flex-direction: row; }
+  .buttongroup--column { flex-direction: column; }
+
+  /* Neutralise child corner radius so the group frame clips cleanly.
+     Higher specificity (.buttongroup > .btn) beats the child's own radius. */
+  .buttongroup > :global(.btn),
+  .buttongroup > :global(.iconbtn) { border-radius: 0; }
+
+  /* 1px separators drawn with an inset box-shadow so the child's `border`
+     shorthand can't override them. */
+  .buttongroup--row > :global(* + *) { box-shadow: inset 1px 0 0 var(--gray-300); }
+  .buttongroup--column > :global(* + *) { box-shadow: inset 0 1px 0 var(--gray-300); }
+</style>

@@ -1,0 +1,97 @@
+---
+/**
+ * SideNav — sticky table-of-contents. Figma: Side Nav (315:1047).
+ * Chapters (name + tagline) with the active chapter expanded to reveal its
+ * infographic titles. Scroll-spy (in index.astro) toggles `.is-active` on the
+ * active chapter and `.is-current` on the active infographic; the dot next to
+ * the current infographic shows only in list view.
+ */
+import { chapters } from '../../data/atlas';
+---
+
+<nav class="sidenav" aria-label="Table of contents">
+  {
+    chapters.map((chapter, i) => (
+      <div class:list={['chapter', { 'is-active': i === 0 }]} data-chapter={chapter.id}>
+        <a class="chapter__header" href="#" data-chapter-link={chapter.id}>
+          <span class="chapter__name">{chapter.name}:</span>
+          <span class="chapter__tagline">{chapter.tagline}</span>
+        </a>
+        <div class="chapter__list-wrap">
+          <ul class="chapter__list">
+            {chapter.infographics.map((ig) => (
+              <li>
+                <a class="toc-link type-small" href="#" data-slug={ig.slug} data-chapter={chapter.id}>
+                  {ig.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    ))
+  }
+</nav>
+
+<style>
+  .sidenav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-4); /* 16px */
+    font-family: var(--font-sans);
+  }
+
+  .chapter__header {
+    display: block;
+    padding: var(--size-1) 0; /* 4px */
+    line-height: 1.4;
+    text-decoration: none;
+    color: var(--text-tertiary);
+    transition: color 0.35s ease;
+  }
+  .chapter__name { font-weight: 700; }
+  .chapter__tagline { display: block; font-weight: 400; }
+  .chapter.is-active .chapter__header { color: var(--text-primary); }
+
+  /* Animate to the real content height (0fr → 1fr): constant duration
+     regardless of how many infographics a chapter has, and the closing
+     chapter collapses in sync with the opening one. */
+  .chapter__list-wrap {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.35s ease;
+  }
+  .chapter.is-active .chapter__list-wrap { grid-template-rows: 1fr; }
+  .chapter__list {
+    overflow: hidden;
+    min-height: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0 0 var(--size-3) 20px; /* 0 0 12px 20px */
+  }
+  .chapter__list li { padding-top: 11px; }
+
+  .toc-link {
+    display: block;
+    position: relative;
+    color: var(--text-tertiary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .toc-link:hover { color: var(--text-secondary); }
+
+  /* Highlight the current infographic only in list view. */
+  :global(.feed[data-view='list']) .toc-link.is-current { color: var(--text-primary); }
+
+  /* Dot marker beside the current infographic — list view only. */
+  :global(.feed[data-view='list']) .toc-link.is-current::before {
+    content: '';
+    position: absolute;
+    left: -17px;
+    top: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-primary);
+  }
+</style>

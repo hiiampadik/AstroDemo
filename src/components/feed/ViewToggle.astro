@@ -1,0 +1,65 @@
+---
+/**
+ * ViewToggle — grid/list switch. Figma: Buttons Group (315:1069).
+ * Two segmented buttons; the active one gets a blue-gray-200 background.
+ * Behaviour is wired in index.astro via [data-view-btn].
+ */
+import ListIcon from '../icons/ListIcon.astro';
+import GridIcon from '../icons/GridIcon.astro';
+
+interface Props {
+  initial?: 'grid' | 'list';
+  class?: string;
+}
+const { initial = 'grid', class: className } = Astro.props;
+---
+
+<div class:list={['viewtoggle', className]} role="group" aria-label="View mode">
+  <button
+    type="button"
+    class:list={['viewtoggle__btn', 'type-mono', { 'is-active': initial === 'list' }]}
+    data-view-btn="list"
+    aria-pressed={initial === 'list' ? 'true' : 'false'}
+  >
+    <ListIcon size={16} />
+    <span>List</span>
+  </button>
+  <button
+    type="button"
+    class:list={['viewtoggle__btn', 'type-mono', { 'is-active': initial === 'grid' }]}
+    data-view-btn="grid"
+    aria-pressed={initial === 'grid' ? 'true' : 'false'}
+  >
+    <GridIcon size={16} />
+    <span>Grid</span>
+  </button>
+</div>
+
+<style>
+  .viewtoggle {
+    display: inline-flex;
+    background: var(--white);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--size-1-5); /* 6px */
+    overflow: hidden;
+  }
+  .viewtoggle__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--size-0-5); /* 2px */
+    min-height: var(--size-9); /* 36px */
+    padding: var(--size-1-5) var(--size-3); /* 6px 12px */
+    border: 0;
+    background: transparent;
+    color: var(--text-primary);
+    cursor: pointer;
+  }
+  .viewtoggle__btn + .viewtoggle__btn { box-shadow: inset 1px 0 0 var(--gray-300); }
+  .viewtoggle__btn.is-active { background: var(--blue-gray-200); }
+  .viewtoggle__btn span { padding: 0 var(--size-1); } /* 4px */
+  .viewtoggle__btn :global(svg) { display: block; }
+  .viewtoggle__btn:focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 2px var(--blue-600);
+  }
+</style>

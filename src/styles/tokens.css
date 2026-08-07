@@ -1,0 +1,121 @@
+/* =====================================================================
+   Design tokens — generated from Figma "Atlas klimatické změny"
+   Source: tmp/figma-export.json (collections: Colors, Size, Text)
+   Do not hand-edit values; regenerate from the Figma export.
+   ===================================================================== */
+
+:root {
+  /* --- Color: gray --- */
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+
+  /* --- Color: red --- */
+  --red-50: #fef2f2;
+  --red-100: #fee2e2;
+  --red-200: #fecaca;
+  --red-300: #fca5a5;
+  --red-400: #f87171;
+  --red-500: #ef4444;
+  --red-600: #dc2626;
+  --red-700: #b91c1c;
+  --red-800: #991b1b;
+  --red-900: #7f1d1d;
+
+  /* --- Color: yellow (warm/orange scale) --- */
+  --yellow-50: #fff7ed;
+  --yellow-100: #ffedd5;
+  --yellow-200: #fed7aa;
+  --yellow-300: #fdba74;
+  --yellow-400: #fb923c;
+  --yellow-500: #f97316;
+  --yellow-600: #ea580c;
+  --yellow-700: #c2410c;
+  --yellow-800: #92400e;
+  --yellow-900: #78350f;
+
+  /* --- Color: blue --- */
+  --blue-50: #eff6ff;
+  --blue-100: #dbeafe;
+  --blue-200: #bfdbfe;
+  --blue-300: #93c5fd;
+  --blue-400: #60a5fa;
+  --blue-500: #3b82f6;
+  --blue-600: #2563eb;
+  --blue-700: #1d4ed8;
+  --blue-800: #1e40af;
+  --blue-900: #1e3a8a;
+
+  /* --- Color: blue-gray --- */
+  --blue-gray-100: #f8fafc;
+  --blue-gray-200: #f1f5f9;
+  --blue-gray-300: #e7ecf3;
+  --blue-gray-400: #cbd5e1;
+  --blue-gray-500: #94a3b8;
+  --blue-gray-600: #64748b;
+  --blue-gray-700: #475569;
+  --blue-gray-800: #334155;
+  --blue-gray-900: #1e293b;
+  --blue-gray-950: #0f172a;
+
+  --white: #ffffff;
+
+  /* --- Text colors --- */
+  --text-primary: #111827;
+  --text-secondary: #374151;
+  --text-tertiary: #6b7280;
+
+  /* --- Spacing / size scale (px) --- */
+  --size-0: 0px;
+  --size-px: 1px;
+  --size-0-5: 2px;
+  --size-1: 4px;
+  --size-1-5: 6px;
+  --size-2: 8px;
+  --size-2-5: 10px;
+  --size-3: 12px;
+  --size-3-5: 14px;
+  --size-4: 16px;
+  --size-5: 20px;
+  --size-6: 24px;
+  --size-7: 28px;
+  --size-8: 32px;
+  --size-9: 36px;
+  --size-10: 40px;
+  --size-11: 44px;
+  --size-12: 48px;
+  --size-14: 56px;
+  --size-16: 64px;
+  --size-20: 80px;
+  --size-24: 96px;
+  --size-28: 112px;
+  --size-32: 128px;
+  --size-36: 144px;
+  --size-40: 160px;
+  --size-44: 176px;
+  --size-48: 192px;
+  --size-52: 208px;
+  --size-56: 224px;
+  --size-60: 240px;
+  --size-64: 256px;
+  --size-72: 288px;
+  --size-80: 320px;
+  --size-96: 384px;
+
+  /* --- Typography --- */
+  --font-sans: 'Inter Variable', Inter, system-ui, -apple-system, 'Segoe UI',
+    Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'Geist Mono Variable', 'Geist Mono', ui-monospace, SFMono-Regular,
+    Menlo, Consolas, monospace;
+}
+
+html {
+  font-family: var(--font-sans);
+}

@@ -1,0 +1,78 @@
+---
+/**
+ * ArticleCard — list-view card. Figma: Section/Column → Article (129:1284).
+ * Bordered rounded card with a subtle top gradient, centred text block
+ * (title 24px SemiBold + lead 16px, max 800px), then a full-width cropped graphic.
+ */
+interface Props {
+  title: string;
+  lead: string;
+  image: string;
+  slug: string;
+  chapterId: string;
+  href?: string;
+}
+const { title, lead, image, slug, chapterId, href = '#' } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const src = `${base}/images/atlas/${image}`;
+---
+
+<article class="acard" data-slug={slug} data-chapter={chapterId}>
+  <a class="acard__text" href={href}>
+    <h3 class="acard__title type-heading">{title}</h3>
+    <p class="acard__lead type-body">{lead}</p>
+  </a>
+  <a class="acard__media" href={href} aria-hidden="true" tabindex="-1">
+    <img src={src} alt={title} loading="lazy" decoding="async" />
+  </a>
+</article>
+
+<style>
+  .acard {
+    scroll-margin-top: 110px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-6); /* 24px */
+    border: 1px solid var(--gray-300);
+    border-radius: var(--size-2); /* 8px */
+    overflow: hidden;
+    background: linear-gradient(to bottom, var(--blue-gray-100) 0%, var(--white) 15%);
+  }
+
+  .acard__text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-1); /* 4px */
+    max-width: 800px;
+    padding: var(--size-5) var(--size-6) 0; /* 20px 24px 0 */
+    text-decoration: none;
+  }
+  .acard__title {
+    margin: 0;
+    color: var(--text-primary);
+  }
+  .acard__lead {
+    margin: 0;
+    color: var(--text-primary);
+  }
+
+  /* Aspect tuned to the atlas images (5906×4157) so a uniform scale crops
+     3% off each side, 14% off the top, and leaves the bottom flush. */
+  .acard__media {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 1.8;
+    overflow: hidden;
+    background: var(--gray-100);
+  }
+  .acard__media img {
+    position: absolute;
+    left: -3.5%;
+    bottom: -5%;
+    width: 107%;
+    height: auto; /* keep aspect ratio — no distortion */
+    max-width: none;
+    display: block;
+  }
+</style>

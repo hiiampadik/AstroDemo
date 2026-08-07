@@ -1,0 +1,256 @@
+---
+/**
+ * Nav — Figma node 48:1351 ("Top Nav"), two variants:
+ *   • Variant2 (hero, ~208px): 72px title + subtitle, shown on page load.
+ *   • Default (compact, 69px): 24px title, shown after scrolling.
+ * The bar is fixed; it collapses hero → compact on scroll (see <script>).
+ * The FancyBar sits fixed above it. The globe opens a language switcher whose
+ * entries come from `siblings` (later wired to the CMS sibling list).
+ */
+import GlobeIcon from './icons/GlobeIcon.astro';
+
+interface Sibling {
+  code: string;
+  flag: string;
+  url: string;
+}
+interface Props {
+  siblings?: Sibling[];
+  brandHref?: string;
+  /** Start (and stay) in the compact bar — used on detail pages. */
+  compact?: boolean;
+  class?: string;
+}
+
+const defaultSiblings: Sibling[] = [
+  { code: 'CZ', flag: '🇨🇿', url: '#' },
+  { code: 'FR', flag: '🇫🇷', url: '#' },
+  { code: 'EN', flag: '🇬🇧', url: '#' },
+];
+
+const {
+  siblings = defaultSiblings,
+  brandHref = import.meta.env.BASE_URL,
+  compact = false,
+  class: className,
+} = Astro.props;
+---
+
+<header
+  class:list={['nav', { 'is-collapsed': compact }, className]}
+  data-nav
+  data-compact={compact ? '' : undefined}
+>
+  <div class="nav__inner">
+    <a class="nav__brand" href={brandHref}>
+      <span class="nav__title">Atlas of climate change</span>
+      <span class="nav__subtitle">A Visual Guide to the Science and Data</span>
+    </a>
+
+    <nav class="nav__links" aria-label="Primary">
+      <a class="nav__link type-nav-link" href="#">About</a>
+      <a class="nav__link type-nav-link" href="#">Facts on Climate</a>
+
+      <div class="nav__lang" data-lang>
+        <button
+          type="button"
+          class="nav__lang-toggle"
+          aria-label="Change language"
+          aria-expanded="false"
+          aria-haspopup="true"
+          data-lang-toggle
+        >
+          <GlobeIcon size={20} />
+        </button>
+
+        <div class="nav__lang-menu" role="menu">
+          {
+            siblings.map((s) => (
+              <a class="nav__lang-item type-mono" href={s.url} role="menuitem">
+                <span class="nav__lang-flag" aria-hidden="true">{s.flag}</span>
+                <span class="nav__lang-code">{s.code}</span>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: fixed;
+    top: var(--size-5); /* 20px — sits below the FancyBar */
+    left: 0;
+    right: 0;
+    z-index: 90;
+    display: flex;
+    justify-content: center;
+    padding: var(--size-12) var(--size-9); /* 48px 36px (hero) */
+    background: var(--blue-700); /* #1d4ed8 */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--white);
+    transition: padding 0.3s ease;
+  }
+
+  .nav__inner {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--size-8); /* 32px */
+    width: 100%;
+    max-width: 1280px;
+  }
+
+  .nav__brand {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-1-5); /* 6px */
+    color: var(--white);
+    text-decoration: none;
+    transition: gap 0.3s ease;
+  }
+
+  .nav__title {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 72px;
+    line-height: 1.2;
+    letter-spacing: -2.88px;
+    white-space: nowrap;
+    transition: font-size 0.3s ease, letter-spacing 0.3s ease;
+  }
+
+  .nav__subtitle {
+    max-width: 680px;
+    overflow: hidden;
+    max-height: 40px;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 1.1;
+    letter-spacing: -0.36px;
+    color: #f3f3f3;
+    opacity: 1;
+    transition: max-height 0.3s ease, opacity 0.2s ease;
+  }
+
+  .nav__links {
+    display: flex;
+    align-items: center;
+    gap: var(--size-8); /* 32px */
+    flex: none;
+  }
+
+  .nav__link {
+    color: var(--white);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .nav__link:hover { text-decoration: underline; }
+
+  /* --- Collapsed (scrolled) state --- */
+  .nav.is-collapsed {
+    padding: var(--size-5) var(--size-9); /* 20px 36px */
+  }
+  .nav.is-collapsed .nav__inner { align-items: center; }
+  .nav.is-collapsed .nav__title {
+    font-size: 24px;
+    letter-spacing: -0.48px;
+  }
+  .nav.is-collapsed .nav__subtitle {
+    max-height: 0;
+    opacity: 0;
+  }
+  /* Drop the brand's row gap when collapsed so the hidden subtitle doesn't
+     leave an empty gap below the title. */
+  .nav.is-collapsed .nav__brand { gap: 0; }
+
+  /* --- Language switcher --- */
+  .nav__lang { position: relative; }
+
+  .nav__lang-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--size-6); /* 24px */
+    height: var(--size-6);
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--white);
+    cursor: pointer;
+    border-radius: var(--size-1);
+  }
+  .nav__lang-toggle:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+  }
+
+  .nav__lang-menu {
+    position: absolute;
+    top: calc(100% + var(--size-2)); /* 8px below */
+    right: 0;
+    display: none;
+    flex-direction: column;
+    min-width: 72px;
+    background: var(--white);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--size-1-5); /* 6px */
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+  }
+  .nav.is-lang-open .nav__lang-menu { display: flex; }
+
+  .nav__lang-item {
+    display: flex;
+    align-items: center;
+    gap: var(--size-0-5); /* 2px */
+    min-height: var(--size-9); /* 36px */
+    padding: var(--size-1-5) var(--size-3); /* 6px 12px */
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+  .nav__lang-item + .nav__lang-item { border-top: 1px solid var(--gray-300); }
+  .nav__lang-item:hover { background: var(--gray-50); }
+  .nav__lang-flag { font-size: 14px; }
+  .nav__lang-code { padding: 0 var(--size-1); }
+</style>
+
+<script>
+  const nav = document.querySelector('[data-nav]');
+  if (nav) {
+    // Collapse hero → compact on scroll (skipped when the nav is always compact).
+    if (!nav.hasAttribute('data-compact')) {
+      const onScroll = () => {
+        nav.classList.toggle('is-collapsed', window.scrollY > 24);
+      };
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+    }
+
+    // Language dropdown toggle.
+    const langWrap = nav.querySelector('[data-lang]');
+    const toggle = nav.querySelector('[data-lang-toggle]');
+    if (langWrap && toggle) {
+      toggle.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const open = nav.classList.toggle('is-lang-open');
+        toggle.setAttribute('aria-expanded', String(open));
+      });
+      document.addEventListener('click', (event) => {
+        if (!langWrap.contains(event.target)) {
+          nav.classList.remove('is-lang-open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          nav.classList.remove('is-lang-open');
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+  }
+</script>

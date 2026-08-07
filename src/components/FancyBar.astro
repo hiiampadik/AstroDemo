@@ -1,0 +1,58 @@
+---
+/**
+ * FancyBar — thin fixed "climate stripe" bar shown above the navigation.
+ * Figma: node 54:2044. 24 equal segments, blue-gray (cold) → red/orange (hot).
+ * Later: animate on hover.
+ */
+const stripes = [
+  'var(--blue-gray-100)',
+  'var(--blue-gray-200)',
+  'var(--blue-gray-300)',
+  'var(--blue-gray-400)',
+  'var(--blue-gray-500)',
+  'var(--blue-gray-600)',
+  'var(--blue-gray-700)',
+  'var(--blue-gray-800)',
+  'var(--red-50)',
+  'var(--red-100)',
+  'var(--red-200)',
+  'var(--red-300)',
+  'var(--red-400)',
+  'var(--red-500)',
+  'var(--red-600)',
+  'var(--red-700)',
+  'var(--yellow-50)',
+  'var(--yellow-100)',
+  'var(--yellow-200)',
+  'var(--yellow-300)',
+  'var(--yellow-400)',
+  'var(--yellow-500)',
+  'var(--yellow-600)',
+  'var(--yellow-700)',
+];
+
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<div class:list={['fancybar', className]} aria-hidden="true">
+  {stripes.map((color) => <span class="fancybar__stripe" style={`background:${color}`} />)}
+</div>
+
+<style>
+  .fancybar {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 100;
+    display: flex;
+    width: 100%;
+    height: var(--size-5); /* 20px */
+  }
+
+  .fancybar__stripe {
+    flex: 1 1 0;
+    height: 100%;
+  }
+</style>

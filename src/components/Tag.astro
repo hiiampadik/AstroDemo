@@ -1,0 +1,45 @@
+---
+/**
+ * Tag — chapter pill used in the feed (tag + trailing text) and on the
+ * infographic detail (tag above the title). Figma: node 82:1104.
+ */
+import CheckIcon from './icons/CheckIcon.astro';
+
+interface Props {
+  /** Tag text; alternatively pass content via the default slot. */
+  label?: string;
+  /** Show the leading check icon (default true, per the Figma component). */
+  showIcon?: boolean;
+  class?: string;
+}
+const { label, showIcon = true, class: className } = Astro.props;
+---
+
+<span class:list={['tag', className]}>
+  {showIcon && <CheckIcon class="tag__icon" size={16} />}
+  <span class="tag__label type-tag"><slot>{label}</slot></span>
+</span>
+
+<style>
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--size-1); /* 4px */
+    padding: var(--size-2); /* 8px */
+    background: var(--blue-gray-300);
+    border-radius: var(--size-0-5); /* 2px */
+    color: var(--blue-700);
+  }
+
+  .tag__icon {
+    display: block;
+    flex: none;
+    width: var(--size-4); /* 16px */
+    height: var(--size-4);
+  }
+
+  .tag__label {
+    white-space: nowrap;
+    color: var(--blue-700);
+  }
+</style>
